@@ -1,9 +1,14 @@
-import Button from "@/components/common/button";
+import {cookies} from "next/headers";
+import Navbar from "@/components/common/Navbar";
 
-export default function Home() {
-  return <div className={"h-screen"}>Homepage
-    <Button variant="primary" size="md">
-      Click here
-    </Button>
-  </div>;
+
+export default async function Home() {
+    const cookieStore = await cookies();
+    const authToken = cookieStore.get('authToken');
+    return <div className={"h-screen"}>
+        <nav>
+            <Navbar token={authToken}/>
+        </nav>
+        <hr className="opacity-20 mt-2" />
+    </div>;
 }

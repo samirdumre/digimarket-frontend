@@ -25,19 +25,19 @@ export default function SigninForm() {
                     Sign in to access your account
                 </p>
             </div>
-            <button className="cursor-pointer w-full border border-gray-300 rounded-md py-2 px-4 my-3 hover:bg-gray-50">
-                <div className="flex flex-row gap-x-3 items-center justify-center">
-                    <div>
-                        <Image src="/google-logo.png" alt={"Google logo"} width={20} height={20}/>
-                    </div>
-                    <div>
-                        <p className="font-medium text-sm">Continue with Google</p>
-                    </div>
-                </div>
-            </button>
+            {/*<button className="cursor-pointer w-full border border-gray-300 rounded-md py-2 px-4 my-3 hover:bg-gray-50">*/}
+            {/*    <div className="flex flex-row gap-x-3 items-center justify-center">*/}
+            {/*        <div>*/}
+            {/*            <Image src="/google-logo.png" alt={"Google logo"} width={20} height={20}/>*/}
+            {/*        </div>*/}
+            {/*        <div>*/}
+            {/*            <p className="font-medium text-sm">Continue with Google</p>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</button>*/}
             <form action={formAction}>
             <div className="pt-2 flex flex-col gap-y-3">
-            <hr className="opacity-20 mt-1 mb-2" />
+            {/*<hr className="opacity-20 mt-1 mb-2" />*/}
                 <div className="flex flex-col gap-y-1">
                     <label htmlFor="email" className="font-medium">
                         Email

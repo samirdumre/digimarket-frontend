@@ -88,7 +88,12 @@ export async function handleSignup(prevState, formData: FormData) {
         if(res.ok){
             const data = await res.json();
             await storeAuthToken(data.data.token);
-            redirect('/products');
+            return {
+                success: true,
+                message: "Email verification sent successfully",
+                errors: {},
+                inputs: rawData
+            }
         } else {
             return {
                 success: false,
