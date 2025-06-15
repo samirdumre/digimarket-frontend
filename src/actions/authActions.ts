@@ -1,0 +1,51 @@
+"use server"
+
+import {cookies} from "next/headers";
+import {redirect} from "next/navigation";
+
+export async function storeAuthToken(token: string) {
+    const cookieStore = await cookies();
+
+    cookieStore.set({
+        name: 'authToken',
+        value: token,
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 60 * 60 * 24 * 30,
+        path: '/'
+    })
+}
+
+export async function logoutUser(){
+    const cookieStore = await cookies();
+    const token = cookieStore.get('authToken')?.value;
+
+    if(!token){
+        return ({
+            "success": false,
+            "message": "No active session found, please sign in first"
+        })
+    }
+
+    try{
+        const res = await fetch("http://localhost/api/logout", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const data = await res.json();
+        console.log(data);
+        cookieStore.delete('authToken');
+        redirect('/');
+
+    } catch(error){
+        if(error.message?.includes('NEXT_REDIRECT')) {
+            throw  error;
+        }
+        console.error("Error logging out", error);
+    }
+
+}

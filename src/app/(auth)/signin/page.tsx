@@ -1,7 +1,9 @@
+import SigninForm from "@/app/(auth)/signin/signinform.client";
+
 export default function Signin() {
     return (
-        <div>
-            Signin page
+        <div className="h-screen flex justify-center items-center">
+            <SigninForm />
         </div>
     );
 }

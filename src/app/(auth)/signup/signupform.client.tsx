@@ -1,0 +1,65 @@
+"use client"
+
+import Button from "@/components/common/button";
+import Link from "next/link";
+import {handleSignup} from "@/app/(auth)/actions";
+
+export default function SignupForm() {
+    return (
+        <div className="border border-gray-300 rounded-lg p-7 shadow-sm">
+            <div className="flex flex-col items-center justify-center w-70">
+                <div className="flex flex-col justify-center items-center gap-y-2 mb-2">
+                    <p className="font-medium text-2xl">
+                        Sign up
+                    </p>
+                    <p className="font-medium text-md opacity-70">
+                        Sign up to create a free account
+                    </p>
+                </div>
+                <form action={handleSignup}>
+                    <div className="pt-2 flex flex-col gap-y-3">
+                        <div className="flex flex-col gap-y-1">
+                            <label htmlFor="name" className="font-medium">
+                                Name
+                            </label>
+                            <input type="text" name="name" id="name" placeholder="Full name"
+                                   className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                   required/>
+                        </div>
+                        <div className="flex flex-col gap-y-1">
+                            <label htmlFor="email" className="font-medium">
+                                Email
+                            </label>
+                            <input type="text" id="email" name="email" placeholder="samir@digimarket.com"
+                                   className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                   required/>
+                        </div>
+                        <div className="flex flex-col gap-y-1">
+                            <label htmlFor="password" className="font-medium">
+                                Password
+                            </label>
+                            <input type="password" name="password" id="password" placeholder=""
+                                   className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                   required/>
+                        </div>
+                        <div className="flex flex-col gap-y-1">
+                            <label htmlFor="c_password" className="font-medium">
+                                Confirm Password
+                            </label>
+                            <input type="password" name="c_password" id="c_password" placeholder=""
+                                   className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                   required/>
+                        </div>
+                    </div>
+                    <Button type="submit" variant="primary" size="sm" className="w-full mt-3">Sign up</Button>
+                </form>
+                <div className="flex w-full gap-x-2 justify-center mt-5">
+                    <div>
+                        <p className="text-sm font-medium">Already have an account?</p>
+                    </div>
+                    <Link className="text-sm font-medium underline" href="/signin">Sign in</Link>
+                </div>
+            </div>
+        </div>
+    )
+}

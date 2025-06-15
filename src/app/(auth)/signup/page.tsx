@@ -1,7 +1,9 @@
+import SignupForm from "@/app/(auth)/signup/signupform.client";
+
 export default function Signup() {
     return (
-        <div>
-            Signup page
+        <div className="h-screen flex justify-center items-center">
+            <SignupForm />
         </div>
     );
 }
