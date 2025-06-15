@@ -4,8 +4,16 @@ import Image from "next/image";
 import Button from "@/components/common/button";
 import Link from "next/link";
 import {handleSignin} from "@/app/(auth)/actions";
+import {useActionState} from "react";
 
 export default function SigninForm() {
+    const [state, formAction, isPending] = useActionState(handleSignin, {
+        success: null,
+        message: "",
+        errors: {},
+        inputs: undefined
+    });
+
     return (
         <div className="border border-gray-300 rounded-lg p-7 shadow-sm">
         <div className="flex flex-col items-center justify-center w-70">
@@ -27,24 +35,39 @@ export default function SigninForm() {
                     </div>
                 </div>
             </button>
-            <form action={handleSignin}>
+            <form action={formAction}>
             <div className="pt-2 flex flex-col gap-y-3">
             <hr className="opacity-20 mt-1 mb-2" />
                 <div className="flex flex-col gap-y-1">
                     <label htmlFor="email" className="font-medium">
                         Email
                     </label>
-                    <input type="text" name="email" id="email" placeholder="samir@digimarket.com" className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" required/>
+                    <input type="text" name="email" id="email" placeholder="samir@digimarket.com" className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" defaultValue={state?.inputs?.email} required/>
+                    {state?.errors?.email && (
+                        <p className="text-red-500 text-sm mt-1">{state.errors.email}</p>
+                    )}
                 </div>
                 <div className="flex flex-col gap-y-1">
                     <label htmlFor="password" className="font-medium">
                         Password
                     </label>
-                    <input type="password" name="password" id="password" placeholder="" className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" required/>
+                    <input type="password" name="password" id="password" placeholder="" className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" defaultValue={state?.inputs?.password} required/>
+                    {state?.errors?.password && (
+                        <p className="text-red-500 text-sm mt-1">{state.errors.password}</p>
+                    )}
                 </div>
             </div>
-            <Button variant="primary" size="sm" className="w-full mt-3">Sign in</Button>
+            <Button type="submit" disabled={isPending} variant="primary" size="sm" className={`w-full mt-3 ${isPending ? 'cursor-not-allowed': ''}`}>
+                {isPending ? "Signing in..." : 'Sign in'}
+            </Button>
             </form>
+
+            {(state?.success === false) && (
+                <div className='text-red-500 border border-red-300 rounded-sm px-2 py-1 mt-2 text-sm w-[calc(100%-8px)]'>
+                    {state.message}
+                </div>
+            )}
+
             <button className="cursor-pointer mt-3">
                 <p className="opacity-70 text-sm font-medium hover:opacity-100">Forgot password?</p>
             </button>
