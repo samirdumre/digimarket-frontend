@@ -19,9 +19,9 @@ export async function storeAuthToken(token: string) {
 
 export async function logoutUser(){
     const cookieStore = await cookies();
-    const token = cookieStore.get('authToken')?.value;
+    const authToken = cookieStore.get('authToken')?.value;
 
-    if(!token){
+    if(!authToken){
         return ({
             "success": false,
             "message": "No active session found, please sign in first"
@@ -33,11 +33,10 @@ export async function logoutUser(){
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${authToken}`
             }
         });
         const data = await res.json();
-        console.log(data);
         cookieStore.delete('authToken');
         redirect('/');
 

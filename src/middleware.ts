@@ -2,7 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 
 export function middleware(request: NextRequest) {
     const authToken = request.cookies.get('authToken')?.value;
-    const {pathname} = request.nextUrl;
+    const {pathname, searchParams} = request.nextUrl;
 
     const publicPaths = ['/', '/signup', 'signin'];
     const isPublicPath = publicPaths.includes(pathname);
@@ -10,7 +10,9 @@ export function middleware(request: NextRequest) {
     const protectedPaths = ['/products'];
     const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path));
 
-    if(isProtectedPath && !authToken){
+    // Guarding protected routes on frontend with middleware
+    // This logic allows the user to access the guarded routes upon verifying the fist time
+    if((isProtectedPath && !(searchParams.get('email_verified') === 'true') && !authToken)) {
         return NextResponse.redirect(new URL('/signin', request.url));
     }
 
@@ -22,5 +24,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/products'],
+    matcher: ['/products', '/admin'],
 }
