@@ -21,7 +21,7 @@
     </PhpStan_settings>
   </component>
   <component name="PhpStanOptionsConfiguration">
-    <option name="memoryLimit" value="3G" />
+    <option name="memoryLimit" value="4G" />
     <option name="transferred" value="true" />
   </component>
   <component name="Psalm">

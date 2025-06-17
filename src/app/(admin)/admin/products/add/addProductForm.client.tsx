@@ -3,7 +3,7 @@
 import Form from "next/form";
 import {handleAddProduct, AddProductFormState} from "@/app/(admin)/admin/products/add/actions";
 import {useActionState, useState} from "react";
-import {CldUploadWidget} from "next-cloudinary";
+import {CldUploadWidget, CldUploadWidgetProps} from "next-cloudinary";
 import Image from "next/image";
 import {X} from "lucide-react";
 import Button from "@/components/common/button";
@@ -39,20 +39,36 @@ export default function AddProductForm() {
         setThumbnailUrl('');
     }
 
-    function handleImagesUploadSuccess(result){
+    function handleImagesUploadSuccess(result) {
+        if(result.event === "success" && result.info && result.info.secure_url){
+            const secureUrl = result.info.secure_url;
+            if(secureUrl){
+                setImageUrls(prevUrls => {
+                    const updatedUrls = [...prevUrls, secureUrl];
 
+                    // Limit the imageUrls to 4
+                    return updatedUrls.slice(0,4);
+                })
+            }
+            console.log("secure",secureUrl);
+            console.log("result",result);
+        }
+        setAreImagesUploading(false);
     }
 
-    function handleImagesUploadError(error){
-
+    function handleImagesUploadError(error) {
+        console.error("Error uploading images ", error);
+        setAreImagesUploading(false);
     }
 
-    function resetImagesUploader(){
-
+    function removeImage(indexToRemove) {
+        setImageUrls((prev) => prev.filter((_, index) => index !== indexToRemove));
     }
 
-
-
+    function handleCancel(){
+        setImageUrls([]);
+        setThumbnailUrl('');
+    }
 
     return (
         <div>
@@ -163,12 +179,16 @@ export default function AddProductForm() {
                             </button>
                         )}
                     </CldUploadWidget>
+
+                    {/* Thumbnail Previews */}
                     <div>
                         {thumbnailUrl && (
                             <div className="border border-gray-300 rounded-lg px-3 py-1 shadow-sm">
                                 <div className="flex justify-between items-center">
-                                <p className="text-sm font-medium text-gray-700">Preview</p>
-                                    <button className="cursor-pointer" onClick={resetThumbnailUploader}><X size={20} className="text-black-300 hover:text-red-500" /></button>
+                                    <p className="text-sm font-medium text-gray-700">Preview</p>
+                                    <button className="cursor-pointer" onClick={resetThumbnailUploader}><X size={20}
+                                                                                                           className="text-black-300 hover:text-red-500"/>
+                                    </button>
                                 </div>
                                 <div className="relative">
                                     <Image
@@ -186,7 +206,7 @@ export default function AddProductForm() {
 
                 {/* Hidden input to include thumbnail URL in form submission */}
                 {thumbnailUrl && (
-                    <input type="hidden" name="thumbnailUrl" value={thumbnailUrl} />
+                    <input type="hidden" name="thumbnailUrl" value={thumbnailUrl}/>
                 )}
 
                 {/* For Images */}
@@ -196,55 +216,69 @@ export default function AddProductForm() {
                         uploadPreset="digimarket_uploads"
                         onSuccess={handleImagesUploadSuccess}
                         onError={handleImagesUploadError}
-                        onOpen={() => setIsThumbnailUploading(true)}
-                        onClose={() => setIsThumbnailUploading(false)}
+                        onOpen={() => setAreImagesUploading(true)}
+                        onClose={() => setAreImagesUploading(false)}
                         options={{
-                            maxFiles: 4,
+                            maxFiles: 4 - imageUrls.length,
                             resourceType: "image",
                             clientAllowedFormats: ["jpg", "jpeg", "png", "gif", "webp"],
                             maxFileSize: 10 * 1024 * 1024, // 10MB
-                            sources: ['local', 'url', 'camera']
+                            sources: ['local', 'url', 'camera'],
+                            multiple: true,
                         }}
                     >
                         {({open, isLoading}) => (
-                            <button onClick={() => {
+                            <button type="button" onClick={() => {
                                 open();
                             }}
-                                    disabled={isLoading || isThumbnailUploading}
+                                    disabled={isLoading || areImagesUploading || imageUrls.length >= 4}
                                     className="cursor-pointer"
                             >
                                 <div
-                                    className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors">
-                                    {isThumbnailUploading ? 'Uploading...' : isLoading ? 'Loading...' : 'Choose Images'}
+                                    className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors disabled:cursor-not-allowed">
+                                    {areImagesUploading ? 'Uploading...' : isLoading ? 'Loading...' : imageUrls.length >= 4 ? 'Maximum Images Reached' : 'Choose Images'}
                                     <p className="text-gray-500 text-sm">Click to upload or drag and drop</p>
-                                    <p className="text-gray-400 text-xs mt-1">PNG, JPG, GIF up to 10MB <br /> You can upload upto 4 images </p>
+                                    <p className="text-gray-400 text-xs mt-1">PNG, JPG, GIF up to 10MB <br/> You can
+                                        upload upto 4 images </p>
                                 </div>
                             </button>
                         )}
                     </CldUploadWidget>
+
+                    {/* Image Previews */}
                     <div>
-                        {thumbnailUrl && (
-                            <div className="border border-gray-300 rounded-lg px-3 py-1 shadow-sm">
-                                <div className="flex justify-between items-center">
-                                    <p className="text-sm font-medium text-gray-700">Preview</p>
-                                    <button className="cursor-pointer" onClick={resetImagesUploader}><X size={20} className="text-black-300 hover:text-red-500" /></button>
-                                </div>
+                        {imageUrls.length > 0 && (
+                            <div className="rounded-lg px-3 py-1">
                                 <div className="relative">
-                                    <Image
-                                        src={thumbnailUrl}
-                                        alt="Thumbnail preview"
-                                        width={1000}
-                                        height={1000}
-                                        className="w-25 h-24 object-cover rounded-md border shadow-sm"
-                                    />
+                                    <div className="flex gap-x-4">
+                                        {imageUrls.map((url, index) => (
+                                            <div className="border border-gray-300 shadow-sm rounded-lg px-3 py-1" key={index}>
+                                                <div className="flex justify-between items-center">
+                                                    <p className="text-sm font-medium text-gray-700">{index + 1}</p>
+                                                    <button className="cursor-pointer" onClick={() => {
+                                                        removeImage(index)
+                                                    }}><X size={20}
+                                                          className="text-black-300 hover:text-red-500"/>
+                                                    </button>
+                                                </div>
+                                                <Image src={url} alt={`Product image ${index + 1}`} width={1000}
+                                                       height={1000}
+                                                       className="w-25 h-24 object-cover rounded-md border shadow-sm"/>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
-                <div className="flex px-71 justify-end mt-5 gap-x-10">
-                <Button type="submit" variant="primary" size="md">Submit</Button>
-                <Button variant="destructive" size="md">Cancel</Button>
+                {/* Hidden input to include imageUrls in form submission */}
+                {imageUrls.map((url,index) => (
+                    <input key={index} type="hidden" name={`image_${index}`} value={url} />
+                ))}
+                <div className="flex px-71 mt-15 mb-10 gap-x-10">
+                    <Button type="submit" disabled={isPending} variant="primary" size="md">{isPending ? 'Submitting...' : 'Submit'}</Button>
+                    <Button type="reset" onClick={handleCancel} variant="destructive" size="md">Cancel</Button>
                 </div>
             </Form>
         </div>
