@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
               hostname: 'framerusercontent.com',
               port: '',
               pathname: '/images/**',
+          },
+          {
+              protocol: 'https',
+              hostname: 'res.cloudinary.com',
+              port: '',
+              pathname: '/**',
           }
       ]
   }
