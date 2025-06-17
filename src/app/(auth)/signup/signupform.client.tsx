@@ -12,7 +12,7 @@ export default function SignupForm() {
         success: false,
         message: "",
         errors: {},
-        inputs: undefined
+        inputs: {}
     });
 
     if(state.success){

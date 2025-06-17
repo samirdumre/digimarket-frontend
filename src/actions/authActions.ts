@@ -12,9 +12,10 @@ export async function storeAuthToken(token: string) {
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
-        maxAge: 60 * 60 * 24 * 30,
+        maxAge: 60 * 60 * 24 * 30, // 1 month
         path: '/'
-    })
+    });
+
 }
 
 export async function logoutUser(){

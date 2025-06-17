@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
 
     // Guarding protected routes on frontend with middleware
     // This logic allows the user to access the guarded routes upon verifying the fist time
-    if((isProtectedPath && !(searchParams.get('email_verified') === 'true') && !authToken)) {
+    if(isProtectedPath && !authToken) {
         return NextResponse.redirect(new URL('/signin', request.url));
     }
 
@@ -24,5 +24,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/products', '/admin'],
+    matcher: ['/admin'],
 }
