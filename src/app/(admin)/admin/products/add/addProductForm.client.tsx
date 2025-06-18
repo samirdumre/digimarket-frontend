@@ -3,7 +3,7 @@
 import Form from "next/form";
 import {handleAddProduct, AddProductFormState} from "@/app/(admin)/admin/products/add/actions";
 import {useActionState, useState} from "react";
-import {CldUploadWidget, CldUploadWidgetProps} from "next-cloudinary";
+import {CldUploadWidget} from "next-cloudinary";
 import Image from "next/image";
 import {X} from "lucide-react";
 import Button from "@/components/common/button";
@@ -27,7 +27,6 @@ export default function AddProductForm() {
     function handleThumbnailUploadSuccess(result) {
         setThumbnailUrl(result.info.secure_url);
         setIsThumbnailUploading(false);
-        console.log("Upload successful", result.info.secure_url);
     }
 
     function handleThumbnailUploadError(error) {
@@ -50,8 +49,6 @@ export default function AddProductForm() {
                     return updatedUrls.slice(0,4);
                 })
             }
-            console.log("secure",secureUrl);
-            console.log("result",result);
         }
         setAreImagesUploading(false);
     }
@@ -82,7 +79,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="text" id="name" name="name"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   required/>
+                                   defaultValue={state.inputs.name} required/>
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -92,7 +89,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="text" id="title" name="title"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   required/>
+                                   defaultValue={state.inputs.title} required/>
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -102,7 +99,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="text" id="shortDescription" name="shortDescription"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   required/>
+                                   defaultValue={state.inputs.shortDescription} required/>
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -112,7 +109,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="number" id="price" name="price"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   required/>
+                                   defaultValue={state.inputs.price} required/>
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -122,7 +119,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="number" id="quantity" name="quantity"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   required/>
+                                   defaultValue={state.inputs.quantity} required/>
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -132,7 +129,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="text" id="category" name="category"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   required/>
+                                   defaultValue={state.inputs.category} required/>
                         </div>
                     </div>
                 </div>
@@ -144,7 +141,7 @@ export default function AddProductForm() {
                         <textarea id="description" name="description" rows={10}
                                   placeholder="Enter detailed product description here..."
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                  required/>
+                                  defaultValue={state.inputs.description} required/>
                     </div>
                 </div>
                 <h3 className="text-xl font-semibold px-71 mb-5 mt-10">Thumbnail</h3>
