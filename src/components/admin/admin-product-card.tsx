@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import Button from "@/components/common/button";
-import {Star} from "lucide-react";
 import {deleteProduct} from "@/app/(admin)/admin/actions";
-import Form from "next/form";
+import {useRouter} from "next/navigation";
 
 export default function AdminProductCard({
                                                    id,
@@ -16,13 +15,19 @@ export default function AdminProductCard({
                                                    thumbnailUrl
                                                }) {
 
-    async function handleDelete() {
-        "use server"
-        const result = window.confirm(`⚠️ Delete Product\n\nAre you sure you want to delete "${title}"?\n\nThis action cannot be undone.`);
+    const router = useRouter();
 
+    function handleDelete() {
+        const result = window.confirm(`Are you sure you want to delete "${title}"?\n\nThis action cannot be undone.`);
         if (result) {
-            await deleteProduct(id);
+            deleteProduct(id).then(() => {
+            // window.location.reload();
+            });
         }
+    }
+
+    function handleEdit(){
+        router.push(`/admin/${id}/edit`);
     }
 
     return (
@@ -41,12 +46,8 @@ export default function AdminProductCard({
                     <h5 className="font-semibold mt-1">${price}</h5>
                 </div>
                 <div className="flex justify-between">
-                    <Form action={handleDelete}>
-                        <Button size="md" variant="outline" className="border-black w-25">Edit</Button>
-                    </Form>
-                    <Form action={handleDelete}>
-                        <Button size="md" variant="destructive" className="border-black w-25">Delete</Button>
-                    </Form>
+                        <Button onClick={handleEdit} size="md" variant="outline" className="border-black w-25">Edit</Button>
+                        <Button onClick={handleDelete} size="md" variant="destructive" className="border-black w-25">Delete</Button>
                 </div>
             </div>
         </div>

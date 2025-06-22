@@ -3,8 +3,8 @@
 import {productSchema} from "@/lib/validations";
 import {cookies} from "next/headers";
 import {CategoriesResponse} from "@/types/category";
-import {number} from "zod";
 import {redirect} from "next/navigation";
+import {Product} from "@/types/product";
 
 export type AddProductFormState = {
     success: boolean;
@@ -13,10 +13,14 @@ export type AddProductFormState = {
     inputs: Record<string, any>;
 }
 
+
 export async function handleAddProduct(
     prevState: AddProductFormState,
     formData: FormData
 ): Promise<AddProductFormState> {
+
+    const cookieStore = await cookies();
+    const authToken = cookieStore.get('authToken')?.value;
 
     const images: Array<string> = [];
     for (const [key, value] of formData.entries()) {
@@ -24,8 +28,6 @@ export async function handleAddProduct(
             images.push(value);
         }
     }
-    const cookieStore = await cookies();
-    const authToken = cookieStore.get('authToken')?.value;
     const categories = await getCategories();
 
     const inputData = {
@@ -96,9 +98,9 @@ export async function handleAddProduct(
     }
 }
 
-
 // Get categories form backend
 export async function getCategories(){
+
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken')?.value;
 
@@ -128,5 +130,25 @@ export async function getCategories(){
     }catch(error){
         console.error("Error getting categories", error);
         return [];
+    }
+}
+
+export async function getProductById(id: number){
+
+    const cookieStore = await cookies();
+    const authToken = cookieStore.get('authToken')?.value;
+
+    try{
+        const res= await fetch(`http://localhost/api/v1/products/${id}`,{
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+        });
+        const data = await res.json();
+        return data.data;
+    } catch (error) {
+        console.error("Error getting product by Id", error);
     }
 }

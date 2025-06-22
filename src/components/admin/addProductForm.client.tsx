@@ -1,28 +1,31 @@
 "use client"
 
 import Form from "next/form";
-import {handleAddProduct, AddProductFormState} from "@/app/(admin)/admin/(products)/add/actions";
+import {handleAddProduct, AddProductFormState} from "@/app/(admin)/admin/(products)/actions";
 import {useActionState, useState} from "react";
 import {CldUploadWidget} from "next-cloudinary";
 import Image from "next/image";
 import {X} from "lucide-react";
 import Button from "@/components/common/button";
 
-export default function AddProductForm({categories}) {
+export default function AddProductForm({categories, inputData}) {
     const [state, formAction, isPending] = useActionState<AddProductFormState, FormData>(handleAddProduct, {
         success: false,
         message: "",
         errors: {},
-        inputs: {}
+        inputs: inputData || {}
     });
 
     // For Thumbnail
-    const [thumbnailUrl, setThumbnailUrl] = useState('');
+    const [thumbnailUrl, setThumbnailUrl] = useState( inputData.thumbnail ||'');
     const [isThumbnailUploading, setIsThumbnailUploading] = useState(false);
 
     // For Images
-    const [imageUrls, setImageUrls] = useState([]);
+    const [imageUrls, setImageUrls] = useState(inputData.images || []);
     const [areImagesUploading, setAreImagesUploading] = useState(false);
+
+    // Category selection
+    const category = categories.find((item) => (item.id === state.inputs.category_id))?.name;
 
     function handleThumbnailUploadSuccess(result) {
         setThumbnailUrl(result.info.secure_url);
@@ -117,7 +120,7 @@ export default function AddProductForm({categories}) {
                             <label htmlFor="category" className="block text-md font-medium text-gray-700 mb-1">
                                 Category
                             </label>
-                            <select name="category" id="category" defaultValue={state?.inputs.category}  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                            <select name="category" id="category" defaultValue={category}  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                                 <option value="">Choose a category</option>
                                 {categories.map((category) => (
                                     <option key={category.id} value={category.name}>

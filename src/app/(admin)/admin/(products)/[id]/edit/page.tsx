@@ -1,5 +1,19 @@
-export default function EditProduct() {
+import AddProductForm from "@/components/admin/addProductForm.client";
+import {getCategories, getProductById} from "@/app/(admin)/admin/(products)/actions";
+import {Product} from "@/types/product";
+
+export default async function EditProduct({params}) {
+    const {id} = params;
+    console.log(id);
+
+    const productToEdit: Product = await getProductById(id);
+    const categories = await getCategories();
+
     return (
-        <div>This page is for editing product</div>
+        <div><h1 className="text-5xl font-semibold text-center mb-20 mt-5">Edit Product</h1>
+            <div>
+                <AddProductForm categories={categories} inputData={productToEdit}/>
+            </div>
+        </div>
     );
 }
