@@ -1,4 +1,4 @@
-import AddProductForm from "@/app/(admin)/admin/products/add/addProductForm.client";
+import AddProductForm from "@/components/admin/addProductForm.client";
 
 export default function AddProduct() {
     return (

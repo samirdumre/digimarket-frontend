@@ -3,7 +3,7 @@ import {cookies} from "next/headers";
 import Link from "next/link";
 import {Plus} from "lucide-react";
 import Button from "@/components/common/button";
-import AdminProductCard from "@/app/(admin)/admin/products/admin-product-card";
+import AdminProductCard from "@/components/admin/admin-product-card";
 import {redirect} from "next/navigation";
 
 export default async function Admin() {

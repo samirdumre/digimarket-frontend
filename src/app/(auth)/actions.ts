@@ -76,7 +76,7 @@ export async function handleSignup(prevState, formData: FormData) {
 
 
     try {
-        const res = await fetch('http://localhost/api/signup', {
+        const res = await fetch('http://localhost/api/v1/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -152,7 +152,7 @@ export async function handleSignin(prevState, formData: FormData) {
     }
 
     try {
-        const res = await fetch('http://localhost/api/signin', {
+        const res = await fetch('http://localhost/api/v1/signin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

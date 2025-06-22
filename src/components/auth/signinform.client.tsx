@@ -42,7 +42,7 @@ export default function SigninForm() {
                     <label htmlFor="email" className="font-medium">
                         Email
                     </label>
-                    <input type="text" name="email" id="email" placeholder="samir@digimarket.com" className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" defaultValue={state?.inputs?.email} required/>
+                    <input type="text" name="email" id="email" placeholder="samir@digimarket.com" className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" defaultValue={state?.inputs?.email} />
                     {state?.errors?.email && (
                         <p className="text-red-500 text-sm mt-1">{state.errors.email}</p>
                     )}
@@ -51,7 +51,7 @@ export default function SigninForm() {
                     <label htmlFor="password" className="font-medium">
                         Password
                     </label>
-                    <input type="password" name="password" id="password" placeholder="" className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" defaultValue={state?.inputs?.password} required/>
+                    <input type="password" name="password" id="password" placeholder="" className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" defaultValue={state?.inputs?.password} />
                     {state?.errors?.password && (
                         <p className="text-red-500 text-sm mt-1">{state.errors.password}</p>
                     )}

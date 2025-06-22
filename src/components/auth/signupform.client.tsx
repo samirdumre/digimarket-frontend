@@ -63,7 +63,7 @@ export default function SignupForm() {
                             </label>
                             <input type="text" name="name" id="name" placeholder="Full name"
                                    className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" defaultValue={state?.inputs?.name}
-                                   required/>
+                                   />
                             {state?.errors?.name && (
                                 <p className="text-red-500 text-sm mt-1">{state.errors.name}</p>
                             )}
@@ -74,7 +74,7 @@ export default function SignupForm() {
                             </label>
                             <input type="text" id="email" name="email" placeholder="samir@digimarket.com"
                                    className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" defaultValue={state?.inputs?.email}
-                                   required/>
+                                   />
                             {state?.errors?.email && (
                                 <p className="text-red-500 text-sm mt-1">{state.errors.email}</p>
                             )}
@@ -85,7 +85,7 @@ export default function SignupForm() {
                             </label>
                             <input type="password" name="password" id="password" placeholder=""
                                    className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" defaultValue={state?.inputs?.password}
-                                   required/>
+                                   />
                             {state?.errors?.password && (
                                 <p className="text-red-500 text-sm mt-1">{state.errors.password}</p>
                             )}
@@ -96,7 +96,7 @@ export default function SignupForm() {
                             </label>
                             <input type="password" name="c_password" id="c_password" placeholder=""
                                    className="pl-4 pr-15 py-2 border-1/2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" defaultValue={state?.inputs?.c_password}
-                                   required/>
+                                   />
                             {state?.errors?.c_password && (
                                 <p className="text-red-500 text-sm mt-1">{state.errors.c_password}</p>
                             )}
