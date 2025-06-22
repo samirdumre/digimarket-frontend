@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "DigiMarket",
-  description: "An online marketplace for digital products",
+  description: "An online marketplace for digital (products)",
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",

@@ -1,18 +1,21 @@
-import Navbar from "@/components/common/Navbar";
 import {cookies} from "next/headers";
 import Link from "next/link";
 import {Plus} from "lucide-react";
 import Button from "@/components/common/button";
 import AdminProductCard from "@/components/admin/admin-product-card";
 import {redirect} from "next/navigation";
+import {getAdminProductsData} from "@/app/(admin)/admin/actions";
+import {Product} from "@/types/product";
 
 export default async function Admin() {
     const cookieStore = await cookies();
-    const authToken = cookieStore.get('authToken');
+    const authToken = cookieStore.get('authToken')?.value;
+
+    const adminProducts: Array<Product> = await getAdminProductsData();
 
     async function redirectAdd() {
         "use server"
-        redirect('/admin/products/add');
+        redirect('/admin/add');
     }
 
     return (
@@ -25,9 +28,6 @@ export default async function Admin() {
                         <Button size="sm" variant="primary"
                                 className="flex items-center justify-center px-2 rounded-md">
                             <Plus/>
-                            {/*<p className="text-xl font-medium">*/}
-                            {/*    */}
-                            {/*</p>*/}
                         </Button>
                     </form>
                     <Link href="/admin/dashboard" className="font-semibold mt-0.5">Dashboard</Link>
@@ -35,24 +35,11 @@ export default async function Admin() {
                     <Link href="/account" className="font-semibold mt-0.5">Account</Link>
                 </div>
             </div>
-            <hr className="opacity-10 mt-2"/>
-            <main className="grid grid-cols-4 h-screen w-full px-35">
-                <AdminProductCard imageUrl={"https://framerusercontent.com/images/lNPV6cqYnY3nwFNKsOVt8TmSsAE.png"}
-                                  name="Grocery List" price={90} rating={4} reviews_count={9}
-                                  short_description="Track your life in seconds" key={"Grocery List"}/>
-                <AdminProductCard
-                    imageUrl={"https://framerusercontent.com/images/I39ajJaRf4ptiJHCjVZbk4V5S8.png?scale-down-to=2048"}
-                    name="Habit Tracker" price={90} rating={4} reviews_count={9}
-                    short_description="Track your life in seconds" key={"Habit Tracker"}/>
-                <AdminProductCard imageUrl={"https://framerusercontent.com/images/MBf82JIFZy6tP3DVDkAImw565o.png"}
-                                  name="Project Tracker" price={90} rating={4} reviews_count={9}
-                                  short_description="Track your life in seconds" key={"Project Tracker"}/>
-                <AdminProductCard imageUrl={"https://framerusercontent.com/images/XHjqY7bWbsoyHD8E8K5p0Wm8kWA.png"}
-                                  name="Expense Tracker" price={90} rating={4} reviews_count={9}
-                                  short_description="Track your life in seconds" key={"Expense Tracker"}/>
-                <AdminProductCard imageUrl={"https://framerusercontent.com/images/MBf82JIFZy6tP3DVDkAImw565o.png"}
-                                  name="Project Tracker" price={90} rating={4} reviews_count={9}
-                                  short_description="Track your life in seconds" key={"Project Tra"}/>
+            <hr className="opacity-10 mt-2 mb-15"/>
+            <main className="grid grid-cols-4 w-full gap-y-30 px-30">
+                {adminProducts?.map((product) => (
+                    <AdminProductCard id={product.id} thumbnailUrl={product.thumbnail} reviews_count={Math.round(Math.random()* 100)} rating={(Math.random() + 4).toFixed(2)} short_description={product.short_description} title={product.title} price={product.price} key={product.id} />
+                ))}
             </main>
         </div>
     );

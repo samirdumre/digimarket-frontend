@@ -3,6 +3,8 @@
 import {productSchema} from "@/lib/validations";
 import {cookies} from "next/headers";
 import {CategoriesResponse} from "@/types/category";
+import {number} from "zod";
+import {redirect} from "next/navigation";
 
 export type AddProductFormState = {
     success: boolean;
@@ -22,25 +24,31 @@ export async function handleAddProduct(
             images.push(value);
         }
     }
-
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken')?.value;
+    const categories = await getCategories();
 
     const inputData = {
         title: formData.get("title"),
-        short_description: formData.get("shortDescription"),
         description: formData.get("description"),
+        short_description: formData.get("shortDescription"),
         price: Number(formData.get("price")),
         quantity: Number(formData.get("quantity")),
         category: formData.get("category"),
         thumbnail: formData.get("thumbnailUrl"),
         images: images
     };
+    const categoryId = categories.find(item => item.name === inputData.category)?.id;
+    const data = {
+        ...inputData,
+        category_id: Number(categoryId),
+        status: 'approved',
+    }
 
-    console.log(inputData);
+    console.log(data);
 
     // Validating with Zod
-    const validated = productSchema.safeParse(inputData);
+    const validated = productSchema.safeParse(data);
 
     if (validated.error) {
         return {
@@ -72,7 +80,12 @@ export async function handleAddProduct(
             }
         }
 
+        redirect('/admin');
+
     } catch (error) {
+        if(error.message?.includes('NEXT_REDIRECT')) {
+            throw  error;
+        }
         console.error("Error sending data to backend", error);
         return {
             success: false,
@@ -105,7 +118,11 @@ export async function getCategories(){
             return [];
         }
 
-        const categories = data?.data.map((category) => category.name) || ["Notion templates, Wordpress themes"];
+        const categories = data?.data.map((category) => ({
+            id: category.id,
+            name: category.name
+        })) || ["Notion templates, Wordpress themes"];
+
         return categories;
 
     }catch(error){

@@ -1,5 +1,5 @@
 import AddProductForm from "@/components/admin/addProductForm.client";
-import {getCategories} from "@/app/(admin)/admin/products/add/actions";
+import {getCategories} from "@/app/(admin)/admin/(products)/add/actions";
 
 export default async function AddProduct() {
     const categories = await getCategories();

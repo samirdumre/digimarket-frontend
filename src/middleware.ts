@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
     const publicPaths = ['/', '/signup', 'signin'];
     const isPublicPath = publicPaths.includes(pathname);
 
-    const protectedPaths = ['/products'];
+    const protectedPaths = ['/(products)'];
     const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path));
 
     // Guarding protected routes on frontend with middleware
@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
     }
 
     if(authToken && (pathname === '/signin' || pathname === '/signup')){
-        return NextResponse.redirect(new URL('/products', request.url));
+        return NextResponse.redirect(new URL('/(products)', request.url));
     }
 
     return NextResponse.next();

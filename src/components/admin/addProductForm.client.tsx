@@ -1,7 +1,7 @@
 "use client"
 
 import Form from "next/form";
-import {handleAddProduct, AddProductFormState} from "@/app/(admin)/admin/products/add/actions";
+import {handleAddProduct, AddProductFormState} from "@/app/(admin)/admin/(products)/add/actions";
 import {useActionState, useState} from "react";
 import {CldUploadWidget} from "next-cloudinary";
 import Image from "next/image";
@@ -74,22 +74,12 @@ export default function AddProductForm({categories}) {
                 <div className="grid grid-cols-2 px-15 gap-y-5">
                     <div className="flex justify-center">
                         <div className="flex flex-col gap-y-1 w-100">
-                            <label htmlFor="name" className="block text-md font-medium text-gray-700 mb-1">
-                                Product Name
-                            </label>
-                            <input type="text" id="name" name="name"
-                                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.name} />
-                        </div>
-                    </div>
-                    <div className="flex justify-center">
-                        <div className="flex flex-col gap-y-1 w-100">
                             <label htmlFor="title" className="block text-md font-medium text-gray-700 mb-1">
                                 Title
                             </label>
                             <input type="text" id="title" name="title"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.title} />
+                                   defaultValue={state?.inputs.title} />
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -99,7 +89,7 @@ export default function AddProductForm({categories}) {
                             </label>
                             <input type="text" id="shortDescription" name="shortDescription"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.shortDescription} />
+                                   defaultValue={state?.inputs.short_description} />
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -109,7 +99,7 @@ export default function AddProductForm({categories}) {
                             </label>
                             <input type="number" id="price" name="price"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.price} />
+                                   defaultValue={state?.inputs.price} />
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -119,7 +109,7 @@ export default function AddProductForm({categories}) {
                             </label>
                             <input type="number" id="quantity" name="quantity"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.quantity} />
+                                   defaultValue={state?.inputs.quantity} />
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -127,11 +117,11 @@ export default function AddProductForm({categories}) {
                             <label htmlFor="category" className="block text-md font-medium text-gray-700 mb-1">
                                 Category
                             </label>
-                            <select name="category" id="category" defaultValue={state.inputs.category}  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                            <select name="category" id="category" defaultValue={state?.inputs.category}  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
                                 <option value="">Choose a category</option>
-                                {categories.map((category,index) => (
-                                    <option key={index} value={category}>
-                                        {category}
+                                {categories.map((category) => (
+                                    <option key={category.id} value={category.name}>
+                                        {category.name}
                                     </option>
                                 ))}
                             </select>
@@ -146,7 +136,7 @@ export default function AddProductForm({categories}) {
                         <textarea id="description" name="description" rows={10}
                                   placeholder="Enter detailed product description here..."
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                  defaultValue={state.inputs.description} />
+                                  defaultValue={state?.inputs.description} />
                     </div>
                 </div>
                 <h3 className="text-xl font-semibold px-71 mb-5 mt-10">Thumbnail</h3>
@@ -278,17 +268,18 @@ export default function AddProductForm({categories}) {
                 {imageUrls.map((url,index) => (
                     <input key={index} type="hidden" name={`image_${index}`} value={url} />
                 ))}
-                <div className="flex px-71 mt-15 mb-10 gap-x-10">
-                    <Button type="submit" disabled={isPending} variant="primary" size="md">{isPending ? 'Submitting...' : 'Submit'}</Button>
-                    <Button type="reset" onClick={handleCancel} variant="destructive" size="md">Cancel</Button>
-                </div>
-                {state?.success === false && (
-                    <div>
-                        <div className='text-red-500 border border-red-300 rounded-sm px-2 py-1 mt-2 text-sm w-[calc(100%-8px)]'>
+
+                {(state?.success === false && state.message) && (
+                    <div className="px-71">
+                        <div className='text-red-500 text-xl border border-red-300 rounded-sm px-2 py-1 mt-2 w-100 text-sm'>
                             {state.message}
                         </div>
                     </div>
                 )}
+                <div className="flex px-71 mt-15 mb-10 gap-x-10">
+                    <Button type="submit" disabled={isPending} variant="primary" size="md">{isPending ? 'Submitting...' : 'Submit'}</Button>
+                    <Button type="reset" onClick={handleCancel} variant="destructive" size="md">Cancel</Button>
+                </div>
             </Form>
         </div>
     );

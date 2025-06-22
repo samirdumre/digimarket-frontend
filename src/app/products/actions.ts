@@ -1,6 +1,7 @@
 "use server"
 
 import {cookies} from "next/headers";
+import {ProductsResponse} from "@/types/product";
 
 export async function getProductsData(){
     const cookieStore = await cookies();
@@ -14,17 +15,17 @@ export async function getProductsData(){
     }
 
     try {
-        const res = await fetch("http://localhost/api/v1/products",{
+        const res= await fetch("http://localhost/api/v1/products",{
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${authToken}`
             },
         });
-        const data = await res.json();
-        return data;
+        const data:ProductsResponse = await res.json();
+        return data.data;
     } catch (error){
-        console.error("Error getting products data", error);
+        console.error("Error getting (products) data", error);
     }
 }
 
