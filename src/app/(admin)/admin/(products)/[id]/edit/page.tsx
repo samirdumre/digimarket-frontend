@@ -12,7 +12,7 @@ export default async function EditProduct({params}) {
     return (
         <div><h1 className="text-5xl font-semibold text-center mb-20 mt-5">Edit Product</h1>
             <div>
-                <AddProductForm categories={categories} inputData={productToEdit}/>
+                <AddProductForm categories={categories} inputData={productToEdit} id={id}/>
             </div>
         </div>
     );

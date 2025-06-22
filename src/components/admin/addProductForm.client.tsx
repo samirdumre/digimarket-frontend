@@ -8,7 +8,7 @@ import Image from "next/image";
 import {X} from "lucide-react";
 import Button from "@/components/common/button";
 
-export default function AddProductForm({categories, inputData}) {
+export default function AddProductForm({categories, inputData, id}) {
     const [state, formAction, isPending] = useActionState<AddProductFormState, FormData>(handleAddProduct, {
         success: false,
         message: "",
@@ -279,6 +279,12 @@ export default function AddProductForm({categories, inputData}) {
                         </div>
                     </div>
                 )}
+
+                {/* Hidden input to include productId in case of editing product */}
+                {id && (
+                    <input type="hidden" name="id" value={id} />
+                )}
+
                 <div className="flex px-71 mt-15 mb-10 gap-x-10">
                     <Button type="submit" disabled={isPending} variant="primary" size="md">{isPending ? 'Submitting...' : 'Submit'}</Button>
                     <Button type="reset" onClick={handleCancel} variant="destructive" size="md">Cancel</Button>

@@ -4,7 +4,6 @@ import {productSchema} from "@/lib/validations";
 import {cookies} from "next/headers";
 import {CategoriesResponse} from "@/types/category";
 import {redirect} from "next/navigation";
-import {Product} from "@/types/product";
 
 export type AddProductFormState = {
     success: boolean;
@@ -12,7 +11,6 @@ export type AddProductFormState = {
     errors?: any;
     inputs: Record<string, any>;
 }
-
 
 export async function handleAddProduct(
     prevState: AddProductFormState,
@@ -61,10 +59,19 @@ export async function handleAddProduct(
         }
     }
 
+    // Check whether the function is expected to add or edit the product by 'id'. If 'id' is present then, the function should edit the product otherwise, add it
+    const id = Number(formData.get("id"));
+
+    const isEditing = typeof id === 'number' && !Number.isNaN(id);
+    const url = isEditing
+        ? `http://localhost/api/v1/products/${id}`
+        : 'http://localhost/api/v1/products';
+    const method = isEditing ? 'PUT' : 'POST';
+
     // Send data to Laravel backend using APIs
     try {
-        const res = await fetch('http://localhost/api/v1/products', {
-            method: 'POST',
+        const res = await fetch(url, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',

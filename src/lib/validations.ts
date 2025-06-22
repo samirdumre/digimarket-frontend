@@ -23,6 +23,3 @@ export const productSchema = z.object({
     thumbnail: z.string(),
     images: z.array(z.string())
 });
-
-// Exports the Typescript type for product
-export type User = z.infer<typeof productSchema>;
