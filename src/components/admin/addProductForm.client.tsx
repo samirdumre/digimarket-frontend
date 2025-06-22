@@ -8,7 +8,7 @@ import Image from "next/image";
 import {X} from "lucide-react";
 import Button from "@/components/common/button";
 
-export default function AddProductForm() {
+export default function AddProductForm({categories}) {
     const [state, formAction, isPending] = useActionState<AddProductFormState, FormData>(handleAddProduct, {
         success: false,
         message: "",
@@ -79,7 +79,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="text" id="name" name="name"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.name} required/>
+                                   defaultValue={state.inputs.name} />
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -89,7 +89,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="text" id="title" name="title"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.title} required/>
+                                   defaultValue={state.inputs.title} />
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -99,7 +99,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="text" id="shortDescription" name="shortDescription"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.shortDescription} required/>
+                                   defaultValue={state.inputs.shortDescription} />
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -109,7 +109,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="number" id="price" name="price"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.price} required/>
+                                   defaultValue={state.inputs.price} />
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -119,7 +119,7 @@ export default function AddProductForm() {
                             </label>
                             <input type="number" id="quantity" name="quantity"
                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.quantity} required/>
+                                   defaultValue={state.inputs.quantity} />
                         </div>
                     </div>
                     <div className="flex justify-center">
@@ -127,9 +127,14 @@ export default function AddProductForm() {
                             <label htmlFor="category" className="block text-md font-medium text-gray-700 mb-1">
                                 Category
                             </label>
-                            <input type="text" id="category" name="category"
-                                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                   defaultValue={state.inputs.category} required/>
+                            <select name="category" id="category" defaultValue={state.inputs.category}  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                                <option value="">Choose a category</option>
+                                {categories.map((category,index) => (
+                                    <option key={index} value={category}>
+                                        {category}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -141,7 +146,7 @@ export default function AddProductForm() {
                         <textarea id="description" name="description" rows={10}
                                   placeholder="Enter detailed product description here..."
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                  defaultValue={state.inputs.description} required/>
+                                  defaultValue={state.inputs.description} />
                     </div>
                 </div>
                 <h3 className="text-xl font-semibold px-71 mb-5 mt-10">Thumbnail</h3>
@@ -277,6 +282,13 @@ export default function AddProductForm() {
                     <Button type="submit" disabled={isPending} variant="primary" size="md">{isPending ? 'Submitting...' : 'Submit'}</Button>
                     <Button type="reset" onClick={handleCancel} variant="destructive" size="md">Cancel</Button>
                 </div>
+                {state?.success === false && (
+                    <div>
+                        <div className='text-red-500 border border-red-300 rounded-sm px-2 py-1 mt-2 text-sm w-[calc(100%-8px)]'>
+                            {state.message}
+                        </div>
+                    </div>
+                )}
             </Form>
         </div>
     );

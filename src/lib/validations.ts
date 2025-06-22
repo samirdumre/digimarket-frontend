@@ -2,9 +2,6 @@ import {z} from "zod";
 
 // Product schema
 export const productSchema = z.object({
-    name: z.string().
-        min(1, "Product name is required").
-        max(100, "Product name is too long (Max 100 characters)"),
     title: z.string().
         min(10, "Title must be at least 10 characters").
         max(150, "Title too long (max 150 chars)"),

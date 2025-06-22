@@ -177,7 +177,6 @@ export async function handleSignin(prevState, formData: FormData) {
             }
         }
 
-
     } catch (error) {
         // Checks if there is a redirect error thrown by redirect() and re-throws it for Nextjs to handle
         if(error.message?.includes('NEXT_REDIRECT')) {
