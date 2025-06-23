@@ -17,11 +17,11 @@ export default function AddProductForm({categories, inputData, id}) {
     });
 
     // For Thumbnail
-    const [thumbnailUrl, setThumbnailUrl] = useState( inputData.thumbnail ||'');
+    const [thumbnailUrl, setThumbnailUrl] = useState( inputData?.thumbnail ||'');
     const [isThumbnailUploading, setIsThumbnailUploading] = useState(false);
 
     // For Images
-    const [imageUrls, setImageUrls] = useState(inputData.images || []);
+    const [imageUrls, setImageUrls] = useState(inputData?.images || []);
     const [areImagesUploading, setAreImagesUploading] = useState(false);
 
     // Category selection
@@ -274,7 +274,7 @@ export default function AddProductForm({categories, inputData, id}) {
 
                 {(state?.success === false && state.message) && (
                     <div className="px-71">
-                        <div className='text-red-500 text-xl border border-red-300 rounded-sm px-2 py-1 mt-2 w-100 text-sm'>
+                        <div className='text-red-500 border border-red-300 rounded-sm px-2 py-1 mt-2 w-100 text-sm'>
                             {state.message}
                         </div>
                     </div>

@@ -21,6 +21,10 @@ export async function getProductsData(){
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${authToken}`
             },
+            next: {
+                tags: ['products'],
+                revalidate: 60 * 60 * 24 * 7, // Cache for 1 week
+            }
         });
         const data:ProductsResponse = await res.json();
         return data.data;

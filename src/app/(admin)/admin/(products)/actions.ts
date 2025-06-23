@@ -4,6 +4,7 @@ import {productSchema} from "@/lib/validations";
 import {cookies} from "next/headers";
 import {CategoriesResponse} from "@/types/category";
 import {redirect} from "next/navigation";
+import {revalidateTag} from "next/cache";
 
 export type AddProductFormState = {
     success: boolean;
@@ -67,6 +68,7 @@ export async function handleAddProduct(
         ? `http://localhost/api/v1/products/${id}`
         : 'http://localhost/api/v1/products';
     const method = isEditing ? 'PUT' : 'POST';
+    const tag = isEditing ? `product-${id}` : 'products';
 
     // Send data to Laravel backend using APIs
     try {
@@ -89,6 +91,7 @@ export async function handleAddProduct(
             }
         }
 
+        revalidateTag(tag); // Removes the stale data and fetches fresh data from db
         redirect('/admin');
 
     } catch (error) {
@@ -152,6 +155,10 @@ export async function getProductById(id: number){
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${authToken}`
             },
+            next: {
+                tags: [`product-${id}`],
+                revalidate: 60 * 60 * 24 * 7, // Cache for 1 week
+            }
         });
         const data = await res.json();
         return data.data;
