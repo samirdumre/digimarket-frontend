@@ -9,8 +9,8 @@ import {revalidateTag} from "next/cache";
 export type AddProductFormState = {
     success: boolean;
     message: string;
-    errors?: any;
-    inputs: Record<string, any>;
+    errors?: unknown;
+    inputs: Record<string, unknown>;
 }
 
 export async function handleAddProduct(
@@ -50,14 +50,22 @@ export async function handleAddProduct(
 
     // Validating with Zod
     const validated = productSchema.safeParse(data);
+    if(!validated.success){
+        // Format zod errors to show specific errors in the form
+        const fieldErrors: Record<string, string> = {};
+        validated.error.issues.forEach((issue) => {
+            const fieldName = issue.path[0] as string;
+            fieldErrors[fieldName] = issue.message;
+        });
 
-    if (validated.error) {
+        console.log("Validation errors:", fieldErrors);
+
         return {
             success: false,
             message: "Product validation failed",
-            errors: validated.error,
+            errors: fieldErrors,
             inputs: inputData
-        }
+        };
     }
 
     // Check whether the function is expected to add or edit the product by 'id'. If 'id' is present then, the function should edit the product otherwise, add it

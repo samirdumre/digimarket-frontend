@@ -4,7 +4,6 @@ import Button from "@/components/common/button";
 import Link from "next/link";
 import {handleSignup} from "@/app/(auth)/actions";
 import {useActionState} from "react";
-import Image from "next/image";
 import { CircleCheckBig } from 'lucide-react';
 
 export default function SignupForm() {

@@ -10,18 +10,18 @@ function Navbar({token}) {
                     <Link href="/">DigiMarket</Link>
                 </h1>
                 <Link href="/products" className="font-semibold pt-2">Products</Link>
-                <Link href="/bestsellers" className="font-semibold pt-2">Bestsellers</Link>
-                <Link href="/offers" className="font-semibold pt-2">Offers</Link>
+                <Link href="/products" className="font-semibold pt-2">Bestsellers</Link>
+                <Link href="/products" className="font-semibold pt-2">Offers</Link>
             </div>
             <div className="flex justify-center gap-x-10 pt-2 pl-10">
                 {token ? (
                     <>
-                        <Link href="/messages" className="font-semibold">Messages</Link>
-                        <Link href="/account" className="font-semibold">Account</Link>
+                        {/*<Link href="/messages" className="font-semibold">Messages</Link>*/}
+                        <Link href="/admin" className="font-semibold">Admin</Link>
                     </>
                 ) : (
                     <>
-                        <Link href="/about" className="font-semibold">About</Link>
+                        <Link href="/signup" className="font-semibold">Sign up</Link>
                         <Link href="/signin" className="font-semibold">Sign in</Link>
                     </>
                 )}

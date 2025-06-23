@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Button from "@/components/common/button";
-import {Star} from "lucide-react";
 import {redirect} from "next/navigation";
 
-export function ProductCard({name, short_description, rating = 5, reviews_count = 9, price, thumbnailUrl}) {
+export function ProductCard({name, short_description, rating = 5, reviews_count = 9, price, thumbnailUrl, id}) {
 
-    async function handleCheckout (){
+    async function goToCheckout (){
         "use server"
-        redirect('/checkout');
+        redirect(`/checkout/${id}`);
     }
     return (
         <div className="flex flex-row justify-center items-center">
@@ -20,10 +19,10 @@ export function ProductCard({name, short_description, rating = 5, reviews_count 
                     <h3 className="text-xl font-semibold">{name}</h3>
                     <h4 className="font-medium mt-1">{short_description}</h4>
                     <p className="mt-1 flex">
-                        Rating: {rating} {" "} ({reviews_count})</p>
+                        Rating: {rating} {" "} ({reviews_count})</p>admin
                     <h5 className="font-semibold mt-1">${price}</h5>
                 </div>
-                <form action={handleCheckout}>
+                <form action={goToCheckout}>
                 <Button type="submit" size="md" variant="outline" className="w-full border-black bg-black text-white transition-colors ">Buy</Button>
                 </form>
             </div>

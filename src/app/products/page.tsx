@@ -17,9 +17,9 @@ async function Products() {
             </nav>
             <hr className="opacity-20 mt-2 mb-15"/>
             <h1 className="text-5xl font-semibold text-center">Products</h1>
-            <main className="grid grid-cols-3 h-screen w-full px-45 gap-y-30">
+            <main className="grid grid-cols-3 h-screen w-full px-45 gap-y-20">
                 {products?.map((product) => (
-                    <ProductCard thumbnailUrl={product.thumbnail} key={product.id} name={product.title} price={product.price} rating={(Math.random() + 4).toFixed(2)} reviews_count={Math.round(Math.random()* 100)} short_description={product.short_description} />
+                    <ProductCard thumbnailUrl={product.thumbnail} id={product.id} key={product.id} name={product.title} price={product.price} rating={(Math.random() + 4).toFixed(2)} reviews_count={Math.round(Math.random()* 100)} short_description={product.short_description} />
                 ))}
             </main>
         </div>

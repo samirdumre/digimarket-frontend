@@ -1,4 +1,3 @@
-import {cookies} from "next/headers";
 import Link from "next/link";
 import {Plus} from "lucide-react";
 import Button from "@/components/common/button";
@@ -8,9 +7,6 @@ import {getAdminProductsData} from "@/app/(admin)/admin/actions";
 import {Product} from "@/types/product";
 
 export default async function Admin() {
-    const cookieStore = await cookies();
-    const authToken = cookieStore.get('authToken')?.value;
-
     const adminProducts: Array<Product> = await getAdminProductsData();
 
     async function redirectAdd() {
@@ -31,8 +27,8 @@ export default async function Admin() {
                         </Button>
                     </form>
                     <Link href="/admin/dashboard" className="font-semibold mt-0.5">Dashboard</Link>
-                    <Link href="/messages" className="font-semibold mt-0.5">Messages</Link>
-                    <Link href="/account" className="font-semibold mt-0.5">Account</Link>
+                    {/*<Link href="/messages" className="font-semibold mt-0.5">Messages</Link>*/}
+                    {/*<Link href="/account" className="font-semibold mt-0.5">Account</Link>*/}
                 </div>
             </div>
             <hr className="opacity-10 mt-2 mb-15"/>
