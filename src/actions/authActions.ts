@@ -37,13 +37,18 @@ export async function logoutUser(){
                 'Authorization': `Bearer ${authToken}`
             }
         });
-        const data = await res.json();
         cookieStore.delete('authToken');
-        redirect('/');
 
+        if (!res.ok) {
+          throw new Error("Logout failed");
+        }
+        redirect('/');
     } catch(error){
-        if(error.message?.includes('NEXT_REDIRECT')) {
-            throw  error;
+        if (
+          error instanceof Error &&
+          error.message?.includes("NEXT_REDIRECT")
+        ) {
+          throw error;
         }
         console.error("Error logging out", error);
     }

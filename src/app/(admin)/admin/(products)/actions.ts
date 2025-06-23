@@ -39,14 +39,15 @@ export async function handleAddProduct(
         thumbnail: formData.get("thumbnailUrl"),
         images: images
     };
-    const categoryId = categories.find(item => item.name === inputData.category)?.id;
-    const data = {
-        ...inputData,
-        category_id: Number(categoryId),
-        status: 'approved',
-    }
+    const categoryId = categories.find(
+      (item) => typeof item === "object" && item.name === inputData.category
+    )?.id;
 
-    console.log(data);
+    const data = {
+      ...inputData,
+      category_id: Number(categoryId),
+      status: "approved",
+    };
 
     // Validating with Zod
     const validated = productSchema.safeParse(data);
@@ -69,9 +70,9 @@ export async function handleAddProduct(
     }
 
     // Check whether the function is expected to add or edit the product by 'id'. If 'id' is present then, the function should edit the product otherwise, add it
-    const id = Number(formData.get("id"));
+    const id = formData.get("id");
 
-    const isEditing = typeof id === 'number' && !Number.isNaN(id);
+    const isEditing = !!id;
     const url = isEditing
         ? `http://localhost/api/v1/products/${id}`
         : 'http://localhost/api/v1/products';
@@ -90,16 +91,21 @@ export async function handleAddProduct(
             body: JSON.stringify(validated.data)
         });
 
-        if(!res.ok){
+        if (!res.ok) {
+            const errorBody = await res.json();
+            console.error("Backend error:", errorBody);
             return {
                 success: false,
-                message: "Couldn't save the product to database",
+                message: "Couldn't save the product to database. " + (errorBody.message || ""),
                 errors: {},
                 inputs: inputData
             }
         }
 
         revalidateTag(tag); // Removes the stale data and fetches fresh data from db
+        if (isEditing) {
+            revalidateTag('products');
+        }
         redirect('/admin');
 
     } catch (error) {

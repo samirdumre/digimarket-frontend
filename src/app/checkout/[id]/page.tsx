@@ -1,15 +1,10 @@
 import {getProductById} from "@/app/(admin)/admin/(products)/actions";
 import {Product} from "@/types/product";
-import {redirect} from "next/navigation";
+import {handleCheckout} from "@/app/checkout/actions";
 
 export default async function Page({params}) {
-  const {id} = params;
+  const {id} = await params;
   const product: Product = await getProductById(id);
-
-  async function handleCheckout(){
-    "use server"
-    redirect('/products');
-  }
 
     return (
       <div>
@@ -128,6 +123,8 @@ export default async function Page({params}) {
                         />
                       </div>
                     </div>
+                    <input type="hidden" name="product_id" value={product.id} />
+                    <input type="hidden" name="product_name" value={product.title} />
                   </div>
                 </div>
               </div>
@@ -137,6 +134,10 @@ export default async function Page({params}) {
             <h2 className="text-xl font-semibold mb-5">Order Summary</h2>
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="space-y-3 mb-6">
+                <div className="flex justify-between">
+                  <span>Title</span>
+                  <span className="font-semibold">{product.title}</span>
+                </div>
                 <div className="flex justify-between">
                   <span>Subtotal</span>
                   <span>${product.price}</span>
@@ -148,7 +149,8 @@ export default async function Page({params}) {
                 </div>
               </div>
               <button
-                type="submit" form="checkout-form"
+                type="submit"
+                form="checkout-form"
                 className="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-semibold hover:bg-blue-700 transition-colors mb-4 cursor-pointer"
               >
                 Place Order

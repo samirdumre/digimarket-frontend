@@ -27,7 +27,7 @@ export default async function Admin() {
                         </Button>
                     </form>
                     <Link href="/admin/dashboard" className="font-semibold mt-0.5">Dashboard</Link>
-                    {/*<Link href="/messages" className="font-semibold mt-0.5">Messages</Link>*/}
+                    <Link href="/products" className="font-semibold mt-0.5">Products</Link>
                     {/*<Link href="/account" className="font-semibold mt-0.5">Account</Link>*/}
                 </div>
             </div>

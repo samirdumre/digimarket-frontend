@@ -3,7 +3,7 @@ import {getCategories, getProductById} from "@/app/(admin)/admin/(products)/acti
 import {Product} from "@/types/product";
 
 export default async function EditProduct({params}) {
-    const {id} = params;
+    const {id} = await params;
     console.log(id);
 
     const productToEdit: Product = await getProductById(id);
