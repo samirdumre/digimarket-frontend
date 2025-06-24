@@ -44,9 +44,24 @@ export async function handleAddProduct(
     )?.id;
 
     // For uploading file to backend
-    const myFile = formData.get("file");
-    const file_url = handleFileUpload(myFile, authToken);
-    const file_name = myFile?.name;
+    const myFile = formData.get("file") as File | null;
+    let file_url = "";
+    let file_name = "";
+
+    if(myFile && myFile.size > 0){
+        try{
+            file_url = await handleFileUpload(myFile);
+            file_name = myFile.name;
+        } catch (error) {
+            console.error("File upload failed, please try again", error);
+            return {
+                success: false,
+                message: "File upload failed, please try again",
+                errors: {},
+                inputs: inputData
+            }
+        }
+    }
 
     const data = {
         ...inputData,
@@ -186,7 +201,12 @@ export async function getProductById(id: number) {
     }
 }
 
-export async function handleFileUpload({file, authToken}) {
+export async function handleFileUpload(file: File) {
+    const cookieStore = await cookies();
+    const authToken = cookieStore.get('authToken')?.value;
+
+    if(!file) return "";
+
     const formData = new FormData();
     formData.append('file', file);
 
@@ -199,11 +219,18 @@ export async function handleFileUpload({file, authToken}) {
             },
             body: formData
         })
+
+        if(!res.ok) {
+            console.error("Upload failed: ", res.status, res.statusText);
+            return "";
+        }
+
         const data = await res.json();
-        return data.url;
+        console.log("file url", data);
+        return data.url || "";
 
     } catch (error) {
         console.error("Error uploading file", error);
-        return "Couldn't upload file";
+        return "";
     }
 }

@@ -21,5 +21,7 @@ export const productSchema = z.object({
     category_id: z.number(),
     status: z.enum(['draft', 'pending', 'approved', 'rejected', 'inactive']),
     thumbnail: z.string(),
-    images: z.array(z.string())
+    images: z.array(z.string()),
+    file_url: z.string().optional(),
+    file_name: z.string().optional(),
 });

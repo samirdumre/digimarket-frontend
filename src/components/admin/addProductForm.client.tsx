@@ -405,7 +405,12 @@ export default function AddProductForm({categories, inputData, id}) {
                 {/* For File */}
                 <div>
                     <h4 className="text-xl font-semibold px-71 mb-5 mt-10">File</h4>
-                    <input type="file" name="file" className="w-60 ml-71 border border-gray-300 px-3 py-1 cursor-pointer rounded-md" />
+                    <input type="file" name="file" className="w-60 ml-71 border border-gray-300 px-3 py-1 cursor-pointer rounded-md" defaultValue={state?.input?.file} />
+                    {state?.errors?.file && (
+                        <p className="text-red-500 text-sm mt-1">
+                            {state.errors.file}
+                        </p>
+                    )}
                 </div>
 
                 {/* Hidden input to include productId in case of editing product */}
