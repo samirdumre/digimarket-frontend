@@ -37,21 +37,28 @@ export async function handleAddProduct(
         quantity: Number(formData.get("quantity")),
         category: formData.get("category"),
         thumbnail: formData.get("thumbnailUrl"),
-        images: images
+        images: images,
     };
     const categoryId = categories.find(
-      (item) => typeof item === "object" && item.name === inputData.category
+        (item) => typeof item === "object" && item.name === inputData.category
     )?.id;
 
+    // For uploading file to backend
+    const myFile = formData.get("file");
+    const file_url = handleFileUpload(myFile, authToken);
+    const file_name = myFile?.name;
+
     const data = {
-      ...inputData,
-      category_id: Number(categoryId),
-      status: "approved",
+        ...inputData,
+        category_id: Number(categoryId),
+        status: "approved",
+        file_url: file_url,
+        file_name: file_name
     };
 
     // Validating with Zod
     const validated = productSchema.safeParse(data);
-    if(!validated.success){
+    if (!validated.success) {
         // Format zod errors to show specific errors in the form
         const fieldErrors: Record<string, string> = {};
         validated.error.issues.forEach((issue) => {
@@ -109,8 +116,8 @@ export async function handleAddProduct(
         redirect('/admin');
 
     } catch (error) {
-        if(error.message?.includes('NEXT_REDIRECT')) {
-            throw  error;
+        if (error.message?.includes('NEXT_REDIRECT')) {
+            throw error;
         }
         console.error("Error sending data to backend", error);
         return {
@@ -123,7 +130,7 @@ export async function handleAddProduct(
 }
 
 // Get categories form backend
-export async function getCategories(){
+export async function getCategories() {
 
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken')?.value;
@@ -144,26 +151,24 @@ export async function getCategories(){
             return [];
         }
 
-        const categories = data?.data.map((category) => ({
+        return data?.data.map((category) => ({
             id: category.id,
             name: category.name
         })) || ["Notion templates, Wordpress themes"];
 
-        return categories;
-
-    }catch(error){
+    } catch (error) {
         console.error("Error getting categories", error);
         return [];
     }
 }
 
-export async function getProductById(id: number){
+export async function getProductById(id: number) {
 
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken')?.value;
 
-    try{
-        const res= await fetch(`http://localhost/api/v1/products/${id}`,{
+    try {
+        const res = await fetch(`http://localhost/api/v1/products/${id}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -178,5 +183,27 @@ export async function getProductById(id: number){
         return data.data;
     } catch (error) {
         console.error("Error getting product by Id", error);
+    }
+}
+
+export async function handleFileUpload({file, authToken}) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const res = await fetch('http://localhost/api/v1/file-upload', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+            },
+            body: formData
+        })
+        const data = await res.json();
+        return data.url;
+
+    } catch (error) {
+        console.error("Error uploading file", error);
+        return "Couldn't upload file";
     }
 }
