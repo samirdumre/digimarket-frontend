@@ -22,6 +22,6 @@ export const productSchema = z.object({
     status: z.enum(['draft', 'pending', 'approved', 'rejected', 'inactive']),
     thumbnail: z.string(),
     images: z.array(z.string()),
-    file_url: z.string().optional(),
-    file_name: z.string().optional(),
+    file_url: z.string(),
+    file_name: z.string(),
 });
