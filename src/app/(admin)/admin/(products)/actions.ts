@@ -1,6 +1,5 @@
 "use server"
 
-import {productSchema} from "@/lib/validations";
 import {cookies} from "next/headers";
 import {CategoriesResponse} from "@/types/category";
 import {redirect} from "next/navigation";
@@ -17,130 +16,148 @@ export async function handleAddProduct(
     prevState: AddProductFormState,
     formData: FormData
 ): Promise<AddProductFormState> {
-
     const cookieStore = await cookies();
-    const authToken = cookieStore.get('authToken')?.value;
+    const authToken = cookieStore.get("authToken")?.value;
 
-    const images: Array<string> = [];
+    // Extract images from form data
+    const images: string[] = [];
     for (const [key, value] of formData.entries()) {
-        if (key.startsWith('image_') && typeof value === 'string') {
+        if (key.startsWith("image_") && typeof value === "string") {
             images.push(value);
         }
     }
+
     const categories = await getCategories();
 
     const inputData = {
-        title: formData.get("title"),
-        description: formData.get("description"),
-        short_description: formData.get("shortDescription"),
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+        short_description: formData.get("shortDescription") as string,
         price: Number(formData.get("price")),
         quantity: Number(formData.get("quantity")),
-        category: formData.get("category"),
-        thumbnail: formData.get("thumbnailUrl"),
-        images: images,
+        category: formData.get("category") as string,
+        thumbnail: formData.get("thumbnailUrl") as string,
+        images,
     };
+
+    // Find category ID
     const categoryId = categories.find(
-        (item) => typeof item === "object" && item.name === inputData.category
+        (item) => item && typeof item === "object" && "name" in item && item.name === inputData.category
     )?.id;
 
-    // For uploading file to backend
-    const myFile = formData.get("file") as File | null;
-    let file_url = "";
-    let file_name = "";
+    if (!categoryId) {
+        return {
+            success: false,
+            message: "Invalid category selected",
+            errors: { category: "Category not found" },
+            inputs: inputData,
+        };
+    }
 
-    if(myFile && myFile.size > 0){
-        try{
+    // Handle file upload
+    const myFile = formData.get("file") as File | null;
+    let file_url = formData.get("file_url") as string || "";
+    let file_name = formData.get("file_name") as string || "";
+
+    if (myFile && myFile.size > 0) {
+        try {
             file_url = await handleFileUpload(myFile);
             file_name = myFile.name;
         } catch (error) {
-            console.error("File upload failed, please try again", error);
             return {
                 success: false,
                 message: "File upload failed, please try again",
                 errors: {},
-                inputs: inputData
-            }
+                inputs: inputData,
+            };
         }
     }
 
+    // Check if editing
+    const id = formData.get("id");
+    const isEditing = !!id;
+
+    // Build data for the Laravel API
     const data = {
-        ...inputData,
+        title: inputData.title,
+        description: inputData.description,
+        short_description: inputData.short_description,
+        price: inputData.price,
+        quantity: inputData.quantity,
         category_id: Number(categoryId),
+        thumbnail: inputData.thumbnail,
+        images,
+        file_url,
+        file_name,
         status: "approved",
-        file_url: file_url,
-        file_name: file_name
     };
 
-    // Validating with Zod
-    const validated = productSchema.safeParse(data);
-    if (!validated.success) {
-        // Format zod errors to show specific errors in the form
-        const fieldErrors: Record<string, string> = {};
-        validated.error.issues.forEach((issue) => {
-            const fieldName = issue.path[0] as string;
-            fieldErrors[fieldName] = issue.message;
-        });
-
-        console.log("Validation errors:", fieldErrors);
-
-        return {
-            success: false,
-            message: "Product validation failed",
-            errors: fieldErrors,
-            inputs: inputData
-        };
-    }
-
-    // Check whether the function is expected to add or edit the product by 'id'. If 'id' is present then, the function should edit the product otherwise, add it
-    const id = formData.get("id");
-
-    const isEditing = !!id;
     const url = isEditing
         ? `http://localhost/api/v1/products/${id}`
-        : 'http://localhost/api/v1/products';
-    const method = isEditing ? 'PUT' : 'POST';
-    const tag = isEditing ? `product-${id}` : 'products';
+        : "http://localhost/api/v1/products";
+    const method = isEditing ? "PUT" : "POST";
 
-    // Send data to Laravel backend using APIs
     try {
         const res = await fetch(url, {
-            method: method,
+            method,
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${authToken}`
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${authToken}`,
             },
-            body: JSON.stringify(validated.data)
+            body: JSON.stringify(data),
         });
 
         if (!res.ok) {
-            const errorBody = await res.json();
-            console.error("Backend error:", errorBody);
+            let errorBody;
+            try {
+                errorBody = await res.json();
+            } catch {
+                const errorText = await res.text();
+                return {
+                    success: false,
+                    message: `Server error (${res.status}): ${errorText.substring(0, 100)}`,
+                    errors: {},
+                    inputs: inputData,
+                };
+            }
+
+            // Handle validation errors
+            if (res.status === 422 && errorBody.errors) {
+                return {
+                    success: false,
+                    message: errorBody.message || "Validation failed",
+                    errors: errorBody.errors,
+                    inputs: inputData,
+                };
+            }
+
             return {
                 success: false,
-                message: "Couldn't save the product to database. " + (errorBody.message || ""),
-                errors: {},
-                inputs: inputData
-            }
+                message: errorBody.message || `Server error (${res.status})`,
+                errors: errorBody.errors || {},
+                inputs: inputData,
+            };
         }
 
-        revalidateTag(tag); // Removes the stale data and fetches fresh data from db
+        // Success - revalidate cache
         if (isEditing) {
-            revalidateTag('products');
+            revalidateTag(`products-${id}`);
         }
-        redirect('/admin');
+        revalidateTag("products");
 
-    } catch (error) {
-        if (error.message?.includes('NEXT_REDIRECT')) {
+        redirect("/admin");
+    } catch (error: any) {
+        if (error.message?.includes("NEXT_REDIRECT")) {
             throw error;
         }
-        console.error("Error sending data to backend", error);
+
         return {
             success: false,
-            message: "Error saving product to database",
+            message: `Network error: ${error.message}`,
             errors: {},
-            inputs: inputData
-        }
+            inputs: inputData,
+        };
     }
 }
 

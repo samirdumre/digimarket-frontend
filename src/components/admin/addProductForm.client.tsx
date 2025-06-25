@@ -17,7 +17,7 @@ export default function AddProductForm({categories, inputData, id}) {
     });
 
     // For Thumbnail
-    const [thumbnailUrl, setThumbnailUrl] = useState(inputData?.thumbnail || '');
+    const [thumbnailUrl, setThumbnailUrl] = useState(inputData?.thumbnail ||  '');
     const [isThumbnailUploading, setIsThumbnailUploading] = useState(false);
 
     // For Images
@@ -25,7 +25,7 @@ export default function AddProductForm({categories, inputData, id}) {
     const [areImagesUploading, setAreImagesUploading] = useState(false);
 
     // Category selection
-    const category = categories.find((item) => (item.id === state.inputs.category_id))?.name;
+    const category = categories.find((item) => (item.id === state.inputs.category_id || item.name === state?.inputs?.category))?.name || '';
 
     function handleThumbnailUploadSuccess(result) {
         setThumbnailUrl(result.info.secure_url);
@@ -405,13 +405,24 @@ export default function AddProductForm({categories, inputData, id}) {
                 {/* For File */}
                 <div>
                     <h4 className="text-xl font-semibold px-71 mb-5 mt-10">File</h4>
-                    <input type="file" name="file" className="w-60 ml-71 border border-gray-300 px-3 py-1 cursor-pointer rounded-md" defaultValue={state?.input?.file} />
+                    <input type="file" name="file" className="w-60 ml-71 border border-gray-300 px-3 py-1 cursor-pointer rounded-md" />
+                    {state?.inputs?.file_name && (
+                        <span> Previous file: {state.inputs.file_name}</span>
+                    )}
                     {state?.errors?.file && (
                         <p className="text-red-500 text-sm mt-1">
                             {state.errors.file}
                         </p>
                     )}
                 </div>
+
+                {/*Hidden input to include file_url and file_name in case of editing product */}
+                {state?.inputs?.file_url && (
+                    <>
+                    <input type="hidden" name="file_url" value={state.inputs.file_url} />
+                    <input type="hidden" name="file_name" value={state.inputs.file_name} />
+                    </>
+                )}
 
                 {/* Hidden input to include productId in case of editing product */}
                 {id && <input type="hidden" name="id" value={id}/>}

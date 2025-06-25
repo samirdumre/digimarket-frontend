@@ -4,7 +4,6 @@ import {Product} from "@/types/product";
 
 export default async function EditProduct({params}) {
     const {id} = await params;
-    console.log(id);
 
     const productToEdit: Product = await getProductById(id);
     const categories = await getCategories();
