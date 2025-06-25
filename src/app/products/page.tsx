@@ -10,8 +10,8 @@ async function Products() {
 
     const productsData = await getProductsData();
     const products: Array<Product> = Array.isArray(productsData)
-      ? productsData
-      : [];
+        ? productsData
+        : [];
 
 
     return (
@@ -19,16 +19,16 @@ async function Products() {
             <nav>
                 <Navbar token={authToken}/>
             </nav>
-            <hr className="opacity-20 mt-2 mb-15"/>
+            <hr className="opacity-30 mt-2 mb-15"/>
             <h1 className="text-5xl font-semibold text-center mb-15">Products</h1>
             <main className="grid grid-cols-3 w-full px-45 gap-y-40">
                 {products?.map((product) => (
-                    <ProductCard thumbnailUrl={product.thumbnail} id={product.id} key={product.id} name={product.title} price={product.price} rating={(Math.random() + 4).toFixed(2)} reviews_count={Math.round(Math.random()* 100)} short_description={product.short_description} />
+                    <ProductCard thumbnailUrl={product.thumbnail} id={product.id} key={product.id} name={product.title}
+                                 price={product.price} rating={(Math.random() + 4).toFixed(2)}
+                                 reviews_count={Math.round(Math.random() * 100)}
+                                 short_description={product.short_description}/>
                 ))}
             </main>
-            <footer className="text-center mt-50 mb-5">
-                &copy;DigiMarket 2025
-            </footer>
         </div>
     );
 }

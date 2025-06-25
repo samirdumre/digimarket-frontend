@@ -10,6 +10,8 @@ export interface Product {
     images: string[];
     category_id: number;
     seller_id: number;
+    file_url: string;
+    file_title: string;
 }
 
 export interface ProductsResponse {

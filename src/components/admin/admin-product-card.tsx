@@ -4,6 +4,7 @@ import Image from "next/image";
 import Button from "@/components/common/button";
 import {deleteProduct} from "@/app/(admin)/admin/actions";
 import {useRouter} from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function AdminProductCard({
                                                    id,
@@ -21,7 +22,7 @@ export default function AdminProductCard({
         const result = window.confirm(`Are you sure you want to delete "${title}"?\n\nThis action cannot be undone.`);
         if (result) {
             deleteProduct(id).then(() => {
-            // window.location.reload();
+            window.location.reload();
             });
         }
     }

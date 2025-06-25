@@ -8,6 +8,6 @@ export default async function Home() {
         <nav>
             <Navbar token={authToken}/>
         </nav>
-        <hr className="opacity-10 mt-2" />
+        <hr className="opacity-30 mt-2" />
     </div>;
 }
