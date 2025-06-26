@@ -2,7 +2,7 @@ import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import {Toaster} from "react-hot-toast";
-import Footer from "@/components/common/footer";
+import {AppRouterCacheProvider} from "@mui/material-nextjs/v13-appRouter";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -40,7 +40,9 @@ export default function RootLayout({
                     "var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif",
             }}
         >
-        {children}
+        <AppRouterCacheProvider>
+            {children}
+        </AppRouterCacheProvider>
         <Toaster/>
         {/*<Footer/>*/}
         </body>
