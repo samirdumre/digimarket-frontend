@@ -2,15 +2,32 @@
 
 import {redirect} from "next/navigation";
 import {getCategories} from "@/app/(admin)/admin/(products)/actions";
+import {cookies} from "next/headers";
 
 export async function goToCheckout(formData) {
+    const cookieStore = await cookies();
+    const authToken = cookieStore.get('authToken')?.value;
     const id = formData.get('id');
-    redirect(`/checkout/${id}`);
-}
+    const productId = {
+        'product_id': id
+    }
 
-export async function goToProduct(formData){
-    const id = formData.get('id');
-    redirect(`/product/${id}`);
+    const res = await fetch(`http://localhost/api/v1/cart-items`,{
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify(productId)
+    });
+
+    if(!res.ok) {
+        console.error("Couldn't add to cart");
+        return;
+    }
+
+    redirect(`/checkout/${id}`);
 }
 
 export async function getCategoryById(id){

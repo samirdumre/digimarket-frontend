@@ -44,7 +44,6 @@ export default function RootLayout({
             {children}
         </AppRouterCacheProvider>
         <Toaster/>
-        {/*<Footer/>*/}
         </body>
         </html>
     );

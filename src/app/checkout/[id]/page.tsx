@@ -1,10 +1,18 @@
 import {getProductById} from "@/app/(admin)/admin/(products)/actions";
 import {Product} from "@/types/product";
-import {handleCheckout} from "@/app/checkout/actions";
+import {getUserCart, handleCheckout} from "@/app/checkout/actions";
+import Button from "@/components/common/button";
+import {redirect} from "next/navigation";
 
 export default async function Page({params}) {
   const {id} = await params;
   const product: Product = await getProductById(id);
+  const cartItems = await getUserCart();
+
+  async function continueShopping(){
+    "use server"
+    redirect('/products');
+  }
 
     return (
       <div>
@@ -131,6 +139,10 @@ export default async function Page({params}) {
             </form>
           </div>
           <div className="gap-x-20 gap-y-5">
+            <form action={continueShopping}>
+            <Button variant="outline" size="md" className="w-70 font-semibold text-lg mb-4 border-black">Continue Shopping</Button>
+            </form>
+            <hr className="mb-5" />
             <h2 className="text-xl font-semibold mb-5">Order Summary</h2>
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="space-y-3 mb-6">

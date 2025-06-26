@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { checkoutSchema } from "@/types/checkout";
+import {cookies} from "next/headers";
 
 export async function handleCheckout(formData: FormData) {
   const rawData = {
@@ -34,4 +35,25 @@ export async function handleCheckout(formData: FormData) {
 
     console.error("Checkout error:", error);
   }
+}
+
+export async function getUserCart(){
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get('authToken')?.value;
+
+  const res = await fetch(`http://localhost/api/v1/get-user-cart`,{
+    method: 'GET',
+    headers:{
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${authToken}`
+    }
+  });
+
+  if(!res.ok) {
+    console.error("Couldn't add to cart");
+    return;
+  }
+
+  const cartData = await res.json();
+  return cartData.data;
 }

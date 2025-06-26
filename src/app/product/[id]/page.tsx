@@ -36,6 +36,7 @@ async function ProductDetailsPage({params}) {
                 </section>
                 <section className="flex flex-col gap-y-2 ml-49 mb-15 items-center">
                     <form action={goToCheckout}>
+                        <input type="hidden" name="id" value={id}/>
                         <Button type="submit" size="md" variant="outline"
                                 className="w-70 border-black bg-black text-white transition-colors ">Add to
                             cart</Button>
