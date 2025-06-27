@@ -4,9 +4,6 @@ export function middleware(request: NextRequest) {
     const authToken = request.cookies.get('authToken')?.value;
     const {pathname} = request.nextUrl;
 
-    // const publicPaths = ['/', '/signup', 'signin'];
-    // const isPublicPath = publicPaths.includes(pathname);
-
     const protectedPaths = ['/(products)'];
     const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path));
 
@@ -23,5 +20,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/admin','/account','/checkout'],
+    matcher: ['/admin','/my-products','/checkout'],
 }

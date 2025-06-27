@@ -5,8 +5,6 @@ import { checkoutSchema } from "@/types/checkout";
 import {cookies} from "next/headers";
 
 export async function handleCheckout(prevState, formData: FormData) {
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get('authToken')?.value;
 
   const data = {
     f_name: formData.get("f_name"),
@@ -33,9 +31,22 @@ export async function handleCheckout(prevState, formData: FormData) {
     }
   }
 
+  // Data to create order
+  const orderData = {
+    'total_amount': formData.get("total_price"),
+    'status': 'completed',
+    'payment_status': 'paid',
+    'payment_method': 'card',
+    'billing_name': `${data.f_name} ${data.l_name}`,
+    'billing_address': data.city
+  }
+
   try {
     // Remove items from the cart after checkout
     await removeCartItems();
+
+    // Create order for the cart items after checkout
+    await createOrder(orderData);
 
     // Redirect for all checkout actions take place
     redirect("/products");
@@ -50,6 +61,9 @@ export async function handleCheckout(prevState, formData: FormData) {
 }
 
 export async function removeCartItems(){
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get('authToken')?.value;
+
   try{
     const res = await fetch('http://localhost/api/v1/remove-all-cart-items', {
       method: 'POST',
@@ -63,8 +77,31 @@ export async function removeCartItems(){
       console.error("Couldn't remove the cart items from the database");
     }
   } catch (error){
-    console.error("Error removing cart items after successful purchase");
+    console.error("Error removing cart items after successful purchase", error);
   }
+}
+
+export async function createOrder(orderData){
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get('authToken')?.value;
+
+  const res = await fetch(`http://localhost/api/v1/orders`,{
+    method: 'POST',
+    headers:{
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${authToken}`
+    },
+    body: JSON.stringify(orderData)
+  });
+
+  if(!res.ok) {
+    console.error("Couldn't create an order");
+    return;
+  }
+
+  console.log("Order created successfully");
+  return;
 }
 
 export async function getUserCart(){

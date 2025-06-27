@@ -156,6 +156,7 @@ export default function CheckoutForm({ productId, cartProducts }) {
                             </div>
                         </div>
                         <input type="hidden" name="product_id" value={productId} />
+                        <input type="hidden" name="total_price" value={totalPrice} />
                     </div>
                 </form>
 

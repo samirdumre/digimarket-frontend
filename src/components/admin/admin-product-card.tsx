@@ -4,7 +4,6 @@ import Image from "next/image";
 import Button from "@/components/common/button";
 import {deleteProduct} from "@/app/(admin)/admin/actions";
 import {useRouter} from "next/navigation";
-import toast from "react-hot-toast";
 
 export default function AdminProductCard({
                                                    id,
