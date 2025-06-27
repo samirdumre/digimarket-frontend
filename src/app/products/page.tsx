@@ -13,7 +13,6 @@ async function Products() {
         ? productsData
         : [];
 
-
     return (
         <div>
             <nav>
@@ -25,7 +24,7 @@ async function Products() {
                 {products?.map((product) => (
                     <ProductCard thumbnailUrl={product.thumbnail} id={product.id} key={product.id} name={product.title}
                                  price={product.price} rating={(Math.random() + 4).toFixed(2)}
-                                 reviews_count={Math.round(Math.random() * 100)}
+                             reviews_count={Math.round(Math.random() * 100)}
                                  short_description={product.short_description}/>
                 ))}
             </main>

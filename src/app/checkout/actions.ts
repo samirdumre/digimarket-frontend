@@ -48,12 +48,29 @@ export async function getUserCart(){
       'Authorization': `Bearer ${authToken}`
     }
   });
-
   if(!res.ok) {
     console.error("Couldn't add to cart");
     return;
   }
-
   const cartData = await res.json();
   return cartData.data;
+}
+
+export async function getProductsFromCart(){
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get('authToken')?.value;
+
+  const res = await fetch('http://localhost/api/v1/get-cart-products',{
+    method: 'GET',
+    headers:{
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${authToken}`
+    }
+  });
+  if(!res.ok){
+    console.error("Couldn't get products from the cart");
+    return;
+  }
+  const cartProducts = await res.json();
+  return cartProducts.data;
 }

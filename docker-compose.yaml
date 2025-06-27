@@ -1,0 +1,16 @@
+services:
+  digimarket-frontend:
+    build:
+      context: .
+      dockerfile: docker/dev/Dockerfile
+    image: digimarket-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=dmwlyfczp
+      - NEXT_PUBLIC_CLOUDINARY_API_KEY=214951482672292
+      - NEXT_PUBLIC_CLOUDINARY_API_SECRET=1aWYXIrXyNBR8M9o6sDk4MaIzIk
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
