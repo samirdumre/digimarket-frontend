@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
         NEXT_PUBLIC_API_URL: 'http://192.176.172.153:8000'
     },
     typescript: {
-        ignoreBuildErrors: true,
+        ignoreBuildErrors: false,
     },
     output: 'standalone',
     images: {

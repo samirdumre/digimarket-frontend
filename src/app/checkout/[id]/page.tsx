@@ -3,7 +3,7 @@ import {Product} from "@/types/product";
 import {getProductsFromCart} from "@/app/checkout/actions";
 import CheckoutForm from "@/components/checkout/checkout-form";
 
-export default async function Page({params}) {
+export default async function Checkout({params}) {
     const {id} = await params;
     const product: Product = await getProductById(id);
     const cartProducts = await getProductsFromCart();

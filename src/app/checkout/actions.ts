@@ -48,6 +48,8 @@ export async function handleCheckout(prevState, formData: FormData) {
     // Create order for the cart items after checkout
     await createOrder(orderData);
 
+    // Create order_items and link each item to the order created
+
     // Redirect for all checkout actions take place
     redirect("/products");
 
@@ -116,7 +118,7 @@ export async function getUserCart(){
     }
   });
   if(!res.ok) {
-    console.error("Couldn't add to cart");
+    console.error("Couldn't get user cart to cart");
     return;
   }
   const cartData = await res.json();
@@ -136,7 +138,7 @@ export async function getProductsFromCart(){
   });
   if(!res.ok){
     console.error("Couldn't get products from the cart");
-    return;
+    return [];
   }
   const cartProducts = await res.json();
   return cartProducts.data;

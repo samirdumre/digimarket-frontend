@@ -24,7 +24,7 @@ export function ProductCard({name, short_description, rating = 5, reviews_count 
                         <h3 className="text-xl font-semibold">{name}</h3>
                         <h4 className="font-medium mt-1">{short_description}</h4>
                         <p className="mt-1 flex">
-                            Rating: {rating} {" "} ({reviews_count})</p>admin
+                            Rating: {rating} {" "} ({reviews_count})</p>
                         <h5 className="font-semibold mt-1">${price}</h5>
                     </div>
                 </form>

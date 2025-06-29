@@ -3,6 +3,7 @@ import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import {Toaster} from "react-hot-toast";
 import {AppRouterCacheProvider} from "@mui/material-nextjs/v13-appRouter";
+import Footer from "@/components/common/footer";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -30,21 +31,23 @@ export default function RootLayout({
                                        children,
                                    }: Readonly<{
     children: React.ReactNode;
-}>) {
-    return (
-        <html lang="en" className={geistSans.variable}>
-        <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
-            style={{
-                fontFamily:
-                    "var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif",
-            }}
-        >
-        <AppRouterCacheProvider>
+}>) {    return (
+    <html lang="en" className={`${geistSans.variable} h-full`}>
+    <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans h-full flex flex-col`}
+        style={{
+            fontFamily:
+                "var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif",
+        }}
+    >
+    <AppRouterCacheProvider>
+        <div className="flex-grow">
             {children}
-        </AppRouterCacheProvider>
-        <Toaster/>
-        </body>
-        </html>
-    );
+        </div>
+        <Footer />
+    </AppRouterCacheProvider>
+    <Toaster/>
+    </body>
+    </html>
+);
 }

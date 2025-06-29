@@ -24,7 +24,7 @@ function Navbar({token}) {
         <div className="flex justify-center items-center gap-x-10 pt-2 pl-10">
           {token ? (
             <>
-              {/*<Link href="/messages" className="font-semibold">Messages</Link>*/}
+              <Link href="/account" className="font-semibold">Account</Link>
               <Link href="/admin" className="font-semibold">
                 Admin
               </Link>
