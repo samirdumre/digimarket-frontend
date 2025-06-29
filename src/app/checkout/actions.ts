@@ -42,13 +42,10 @@ export async function handleCheckout(prevState, formData: FormData) {
   }
 
   try {
-    // Remove items from the cart after checkout
-    await removeCartItems();
 
     // Create order for the cart items after checkout
-    await createOrder(orderData);
-
     // Create order_items and link each item to the order created
+    await createOrder(orderData);
 
     // Redirect for all checkout actions take place
     redirect("/products");
@@ -59,27 +56,6 @@ export async function handleCheckout(prevState, formData: FormData) {
     }
     console.error("Checkout error:", error);
     return;
-  }
-}
-
-export async function removeCartItems(){
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get('authToken')?.value;
-
-  try{
-    const res = await fetch('http://localhost/api/v1/remove-all-cart-items', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${authToken}`
-      },
-    });
-
-    if(!res.ok){
-      console.error("Couldn't remove the cart items from the database");
-    }
-  } catch (error){
-    console.error("Error removing cart items after successful purchase", error);
   }
 }
 

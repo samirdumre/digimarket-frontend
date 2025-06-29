@@ -1,5 +1,6 @@
 import Navbar from "@/components/common/Navbar";
 import {getPurchasedItems, getUserInfo} from "@/app/account/actions";
+import Link from "next/link";
 
 async function Account() {
     const userInfo = await getUserInfo();
@@ -13,7 +14,7 @@ async function Account() {
         return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
     }
 
-    // const purchasedProducts = await getPurchasedItems();
+    const purchasedProducts = await getPurchasedItems();
 
     return (
         <div>
@@ -30,7 +31,12 @@ async function Account() {
             </section>
             <section className="px-55 mt-15">
                 <h3 className="text-xl font-semibold">My Purchases</h3>
-                <p>Show the items that user have purchased</p>
+                <p className="mb-3">(Click to get the product)</p>
+                {purchasedProducts.map((item) => (
+                    <div key={item.id} className="py-1">
+                        <Link target="_blank" className="text-blue-700" href={item.download_url}>{item.product_title}</Link>
+                    </div>
+                ))}
             </section>
         </div>
     );

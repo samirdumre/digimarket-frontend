@@ -39,6 +39,6 @@ export async function getPurchasedItems(){
         return;
     }
 
-    return await res.json();
-
+    const data = await res.json();
+    return data.data;
 }
