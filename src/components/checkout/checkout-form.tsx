@@ -158,6 +158,7 @@ export default function CheckoutForm({ productId, cartProducts }) {
                         <input type="hidden" name="product_id" value={productId} />
                         <input type="hidden" name="total_price" value={totalPrice} />
                     </div>
+                    <p className="text-sm mt-3">(Note: This is just a dummy Component so, you don&apos;t need to put your real credit card and pay anything)</p>
                 </form>
 
                 {state?.message && !state.success && (

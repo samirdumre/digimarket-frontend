@@ -40,9 +40,11 @@ export async function logoutUser(){
         cookieStore.delete('authToken');
 
         if (!res.ok) {
-          throw new Error("Logout failed");
+          console.error("Logout failed");
         }
+
         redirect('/');
+
     } catch(error){
         if (
           error instanceof Error &&
