@@ -2,13 +2,14 @@
 
 import {cookies} from "next/headers";
 import {ProductsResponse} from "@/types/product";
+import getApiUrl from "@/lib/api";
 
 export async function getAdminProductsData(){
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken')?.value;
 
     try {
-        const res= await fetch("http://localhost/api/v1/user-products",{
+        const res= await fetch(getApiUrl("/v1/user-products"),{
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -27,7 +28,7 @@ export async function deleteProduct(id: number){
     const authToken = cookieStore.get('authToken')?.value;
 
     try {
-        const res= await fetch(`http://localhost/api/v1/products/${id}`,{
+        const res= await fetch(getApiUrl(`/v1/products/${id}`),{
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

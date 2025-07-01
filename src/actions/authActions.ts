@@ -2,6 +2,7 @@
 
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
+import getApiUrl from "@/lib/api";
 
 export async function storeAuthToken(token: string) {
     const cookieStore = await cookies();
@@ -30,7 +31,7 @@ export async function logoutUser(){
     }
 
     try{
-        const res = await fetch("http://localhost/api/logout", {
+        const res = await fetch(getApiUrl("/logout"), {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

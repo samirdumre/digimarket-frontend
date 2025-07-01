@@ -5,6 +5,7 @@ import {CategoriesResponse} from "@/types/category";
 import {redirect} from "next/navigation";
 import {revalidateTag} from "next/cache";
 import {productSchema} from "@/lib/validations";
+import getApiUrl from "@/lib/api";
 
 export type AddProductFormState = {
     success: boolean;
@@ -101,8 +102,8 @@ export async function handleAddProduct(
     }
 
     const url = isEditing
-        ? `http://localhost/api/v1/products/${id}`
-        : "http://localhost/api/v1/products";
+        ? getApiUrl(`/v1/products/${id}`)
+        : getApiUrl("/v1/products");
     const method = isEditing ? "PUT" : "POST";
 
     try {
@@ -154,7 +155,7 @@ export async function getCategories() {
     const authToken = cookieStore.get('authToken')?.value;
 
     try {
-        const res = await fetch('http://localhost/api/v1/categories', {
+        const res = await fetch(getApiUrl('/v1/categories'), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -186,7 +187,7 @@ export async function getProductById(id: number) {
     const authToken = cookieStore.get('authToken')?.value;
 
     try {
-        const res = await fetch(`http://localhost/api/v1/products/${id}`, {
+        const res = await fetch(getApiUrl(`/v1/products/${id}`), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -214,7 +215,7 @@ export async function handleFileUpload(file: File) {
     formData.append('file', file);
 
     try {
-        const res = await fetch('http://localhost/api/v1/file-upload', {
+        const res = await fetch(getApiUrl('/v1/file-upload'), {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

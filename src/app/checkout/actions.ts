@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { checkoutSchema } from "@/types/checkout";
 import {cookies} from "next/headers";
+import getApiUrl from "@/lib/api";
 
 export async function handleCheckout(prevState, formData: FormData) {
 
@@ -48,7 +49,7 @@ export async function handleCheckout(prevState, formData: FormData) {
     await createOrder(orderData);
 
     // Redirect for all checkout actions take place
-    redirect("/products");
+    redirect("/account");
 
   } catch (error) {
     if (error instanceof Error && error.message?.includes("NEXT_REDIRECT")) {
@@ -63,7 +64,7 @@ export async function createOrder(orderData){
   const cookieStore = await cookies();
   const authToken = cookieStore.get('authToken')?.value;
 
-  const res = await fetch(`http://localhost/api/v1/orders`,{
+  const res = await fetch(getApiUrl(`/v1/orders`),{
     method: 'POST',
     headers:{
       'Content-type': 'application/json',
@@ -86,7 +87,7 @@ export async function getUserCart(){
   const cookieStore = await cookies();
   const authToken = cookieStore.get('authToken')?.value;
 
-  const res = await fetch(`http://localhost/api/v1/get-user-cart`,{
+  const res = await fetch(getApiUrl(`/v1/get-user-cart`),{
     method: 'GET',
     headers:{
       'Accept': 'application/json',
@@ -105,7 +106,7 @@ export async function getProductsFromCart(){
   const cookieStore = await cookies();
   const authToken = cookieStore.get('authToken')?.value;
 
-  const res = await fetch('http://localhost/api/v1/get-cart-products',{
+  const res = await fetch(getApiUrl('/v1/get-cart-products'),{
     method: 'GET',
     headers:{
       'Accept': 'application/json',

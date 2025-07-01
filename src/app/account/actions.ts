@@ -1,12 +1,13 @@
 "use server"
 
 import {cookies} from "next/headers";
+import getApiUrl from "@/lib/api";
 
 export async function getUserInfo(){
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken')?.value;
 
-    const res = await fetch(`http://localhost/api/v1/get-user-info`,{
+    const res = await fetch(getApiUrl(`/v1/get-user-info`),{
         method: 'GET',
         headers:{
             'Accept': 'application/json',
@@ -26,7 +27,7 @@ export async function getPurchasedItems(){
     const cookieStore = await cookies();
     const authToken = cookieStore.get('authToken')?.value;
 
-    const res = await fetch(`http://localhost/api/v1/get-purchased-items`,{
+    const res = await fetch(getApiUrl(`/v1/get-purchased-items`),{
         method: 'GET',
         headers:{
             'Accept': 'application/json',

@@ -6,10 +6,17 @@ services:
     image: digimarket-frontend:latest
     ports:
       - "3000:3000"
+    env_file:
+      - .env.production
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
-      - NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
-      - NEXT_PUBLIC_CLOUDINARY_API_KEY=${NEXT_PUBLIC_CLOUDINARY_API_KEY}
-      - NEXT_PUBLIC_CLOUDINARY_API_SECRET=${NEXT_PUBLIC_CLOUDINARY_API_SECRET}
+      - NEXT_PUBLIC_API_URL=http://192.176.172.153:8000/api
+      - NEXT_PUBLIC_SITE_URL=http://192.176.172.153:3000
     restart: unless-stopped
+    networks:
+      - digimarket-net
+
+networks:
+  digimarket-net:
+    external: true

@@ -3,6 +3,7 @@
 import {redirect} from "next/navigation";
 import {getCategories} from "@/app/(admin)/admin/(products)/actions";
 import {cookies} from "next/headers";
+import getApiUrl from "@/lib/api";
 
 export async function goToCheckout(formData) {
     const cookieStore = await cookies();
@@ -12,7 +13,7 @@ export async function goToCheckout(formData) {
         'product_id': id
     }
 
-    const res = await fetch(`http://localhost/api/v1/cart-items`,{
+    const res = await fetch(getApiUrl(`/v1/cart-items`),{
         method: 'POST',
         headers:{
             'Content-Type': 'application/json',

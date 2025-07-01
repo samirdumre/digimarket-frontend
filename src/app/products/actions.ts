@@ -2,6 +2,7 @@
 
 import {cookies} from "next/headers";
 import {ProductsResponse} from "@/types/product";
+import getApiUrl from "@/lib/api";
 
 export async function getProductsData(){
     const cookieStore = await cookies();
@@ -15,7 +16,7 @@ export async function getProductsData(){
     }
 
     try {
-        const res= await fetch("http://localhost/api/v1/products",{
+        const res= await fetch(getApiUrl("/v1/products"),{
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
