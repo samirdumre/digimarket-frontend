@@ -11,7 +11,7 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
-      - NEXT_PUBLIC_API_URL=http://192.176.172.153:8000/api
+      - NEXT_PUBLIC_API_URL=http://192.176.172.153/api
       - NEXT_PUBLIC_SITE_URL=http://192.176.172.153:3000
     restart: unless-stopped
     networks:
