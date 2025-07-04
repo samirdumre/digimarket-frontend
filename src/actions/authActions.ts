@@ -15,7 +15,6 @@ export async function storeAuthToken(token: string) {
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 30, // 1 month
       path: "/",
-      domain: "192.176.172.153",
     });
 
 }

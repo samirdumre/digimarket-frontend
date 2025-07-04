@@ -2,7 +2,6 @@ import type {NextConfig} from "next";
 
 const nextConfig: NextConfig = {
   env: {
-    NEXT_PUBLIC_API_URL: "http://192.176.172.153/api",
   },
   typescript: {
     ignoreBuildErrors: true,
@@ -24,7 +23,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "http",
-        hostname: "192.176.172.153",
+        hostname: "app",
         port: "",
         pathname: "/storage/**",
       },
